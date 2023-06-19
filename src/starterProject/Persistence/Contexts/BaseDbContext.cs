@@ -8,6 +8,11 @@ namespace Persistence.Contexts
     {
         public DbSet<Car> Cars { get; set; }
 
+        public BaseDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
+        {
+            
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
