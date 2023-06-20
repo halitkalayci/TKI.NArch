@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Application.Features.Cars.Validations;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,6 @@ public class CreateCarCommandValidator : AbstractValidator<CreateCarCommand>
     {
         RuleFor(i => i.Plate).NotNull().NotEmpty().MinimumLength(2);
         RuleFor(i => i.Kilometer).NotNull().Must(i => i > 0);
+        RuleFor(i => i.Plate).Must(CarCustomValidationRules.IsTurkeyPlate);
     }
 }
