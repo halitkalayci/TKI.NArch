@@ -1,4 +1,4 @@
-﻿using Application.Features.Cars.Rules;
+using Application.Features.Cars.Rules;
 using Core.Application.Pipelines.Authorization;
 using Core.CrossCuttingConcerns.Logging.Serilog.Logger;
 using Core.CrossCuttingConcerns.Logging.Serilog;
@@ -11,6 +11,9 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
 using Core.Application.Pipelines.Validation;
+using Application.Services.Models;
+using Application.Features.Models.Constants;
+using Application.Features.Models.Rules;
 
 namespace Application;
 
@@ -26,10 +29,12 @@ public static class ApplicationServiceRegistration
         });
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddTransient<CarBusinessRules>();
+        services.AddTransient<ModelBusinessRules>();
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
         services.AddTransient<LoggerServiceBase, FileLogger>();
+        services.AddScoped<IModelsService, ModelsManager>();
         return services;
     }
 }

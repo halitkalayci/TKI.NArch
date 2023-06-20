@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -8,6 +8,7 @@ namespace Persistence.Contexts
     {
         public DbSet<Car> Cars { get; set; }
         public DbSet<Brand> Brands { get; set; }
+        public DbSet<Model> Models { get; set; }
 
         public BaseDbContext(DbContextOptions dbContextOptions)
             : base(dbContextOptions) { }
