@@ -9,6 +9,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using FluentValidation;
+using Core.Application.Pipelines.Validation;
 
 namespace Application;
 
@@ -20,9 +22,12 @@ public static class ApplicationServiceRegistration
         {
             config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
             config.AddOpenBehavior(typeof(AuthorizationBehavior<,>));
+            config.AddOpenBehavior(typeof(RequestValidationBehavior<,>));
         });
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddTransient<CarBusinessRules>();
+
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
         services.AddTransient<LoggerServiceBase, FileLogger>();
         return services;
