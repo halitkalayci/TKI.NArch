@@ -1,4 +1,5 @@
-﻿using Application.Repositories;
+﻿using Application.Features.Cars.Rules;
+using Application.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -20,16 +21,19 @@ public class CreateCarCommand : IRequest<CreatedCarDto>
         // Bağımlılıklar
         private IMapper _mapper;
         private ICarRepository _carRepository;
+        private CarBusinessRules _carBusinessRules;
 
-        public CreateCarCommandHandler(IMapper mapper, ICarRepository carRepository)
+        public CreateCarCommandHandler(IMapper mapper, ICarRepository carRepository, CarBusinessRules carBusinessRules)
         {
             _mapper = mapper;
             _carRepository = carRepository;
+            _carBusinessRules = carBusinessRules;
         }
 
         public async Task<CreatedCarDto> Handle(CreateCarCommand request, CancellationToken cancellationToken)
         {
-            // Plaka ile zaten bir araç kayıtlı mı?
+            await _carBusinessRules.CarWithSamePlateShouldNotExist(request.Plate);
+
             Car mappedCar = _mapper.Map<Car>(request);
 
             Car addedCar = _carRepository.Add(mappedCar);

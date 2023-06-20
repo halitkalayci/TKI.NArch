@@ -1,7 +1,9 @@
 using Application;
 using Core.Security;
 using Persistence;
-using System.Reflection;
+using Core.CrossCuttingConcerns.Exceptions.Extensions;
+using Core.CrossCuttingConcerns.Logging.Serilog;
+using Core.CrossCuttingConcerns.Logging.Serilog.Logger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.ConfigureCustomExceptionMiddleware();
 
 app.UseHttpsRedirection();
 

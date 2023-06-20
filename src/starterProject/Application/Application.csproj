@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="Features\Cars\Constants\" />
     <Folder Include="Features\Cars\Validations\" />
-    <Folder Include="Features\Cars\Rules\" />
     <Folder Include="Services\" />
   </ItemGroup>
 

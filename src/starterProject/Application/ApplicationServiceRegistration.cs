@@ -1,4 +1,7 @@
-﻿using Core.Application.Pipelines.Authorization;
+﻿using Application.Features.Cars.Rules;
+using Core.Application.Pipelines.Authorization;
+using Core.CrossCuttingConcerns.Logging.Serilog.Logger;
+using Core.CrossCuttingConcerns.Logging.Serilog;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -19,6 +22,9 @@ public static class ApplicationServiceRegistration
             config.AddOpenBehavior(typeof(AuthorizationBehavior<,>));
         });
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.AddTransient<CarBusinessRules>();
+
+        services.AddTransient<LoggerServiceBase, FileLogger>();
         return services;
     }
 }
