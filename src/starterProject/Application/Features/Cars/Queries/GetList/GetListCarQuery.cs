@@ -1,4 +1,5 @@
 ﻿using Application.Repositories;
+using AutoMapper;
 using Core.Application.Requests;
 using Core.Application.Responses;
 using Core.Persistence.Paging;
@@ -25,18 +26,20 @@ public class GetListCarQuery : IRequest<GetListResponse<GetListCarItemDto>>
     {
         // Bağımlılıklar
         private ICarRepository _carRepository;
-
-        public GetListCarQueryHandler(ICarRepository carRepository)
+        private IMapper _mapper;
+        public GetListCarQueryHandler(ICarRepository carRepository, IMapper mapper)
         {
             _carRepository = carRepository;
+            _mapper = mapper;
         }
 
         public async Task<GetListResponse<GetListCarItemDto>> Handle(GetListCarQuery request, CancellationToken cancellationToken)
         {
             IPaginate<Car> cars = await _carRepository.GetListAsync(index: request.PageRequest.PageIndex, size:request.PageRequest.PageSize);
-            
-            // AutoMapper
-            return null;
+
+            GetListResponse<GetListCarItemDto> response = _mapper.Map<GetListResponse<GetListCarItemDto>>(cars);
+
+            return response;
         }
     }
 }

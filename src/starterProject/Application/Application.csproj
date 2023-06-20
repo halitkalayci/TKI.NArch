@@ -12,11 +12,11 @@
     <Folder Include="Features\Cars\Constants\" />
     <Folder Include="Features\Cars\Validations\" />
     <Folder Include="Features\Cars\Rules\" />
-    <Folder Include="Features\Cars\Profiles\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="MediatR" Version="12.0.1" />
   </ItemGroup>
 

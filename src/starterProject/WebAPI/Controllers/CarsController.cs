@@ -23,7 +23,7 @@ public class CarsController : ControllerBase
         {
             PageRequest = pageRequest
         };
-        var response = Mediator.Send(getListCarQuery);
+        var response = await Mediator.Send(getListCarQuery);
         return Ok(response);
     }
 }
