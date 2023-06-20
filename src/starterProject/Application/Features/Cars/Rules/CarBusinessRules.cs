@@ -1,4 +1,5 @@
-﻿using Application.Repositories;
+﻿using Application.Features.Cars.Constants;
+using Application.Repositories;
 using Core.CrossCuttingConcerns.Exceptions.Types;
 using Domain.Entities;
 
@@ -17,6 +18,7 @@ public class CarBusinessRules
     {
         Car? car = await _carRepository.GetAsync(i => i.Plate == plate);
         if (car != null)
-            throw new BusinessException("Car with same plate already exists");
+            throw new BusinessException(CarMessages.CarWithSamePlateAlreadyExists);
+        // Magic String
     }
 }
