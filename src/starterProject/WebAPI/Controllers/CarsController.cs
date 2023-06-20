@@ -1,4 +1,5 @@
-﻿using Application.Features.Cars.Queries.GetList;
+﻿using Application.Features.Cars.Commands.Create;
+using Application.Features.Cars.Queries.GetList;
 using Core.Application.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +17,13 @@ public class CarsController : BaseController
     {
         GetListCarQuery getListCarQuery = new() { PageRequest = pageRequest };
         var response = await Mediator.Send(getListCarQuery);
+        return Ok(response);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Add([FromBody] CreateCarCommand command)
+    {
+        var response = await Mediator.Send(command);
         return Ok(response);
     }
 }

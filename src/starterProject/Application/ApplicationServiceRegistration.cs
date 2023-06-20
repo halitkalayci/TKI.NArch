@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Core.Application.Pipelines.Authorization;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ public static class ApplicationServiceRegistration
         services.AddMediatR(config =>
         {
             config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
+            config.AddOpenBehavior(typeof(AuthorizationBehavior<,>));
         });
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         return services;

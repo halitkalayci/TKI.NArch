@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Cars\Commands\" />
     <Folder Include="Features\Cars\Constants\" />
     <Folder Include="Features\Cars\Validations\" />
     <Folder Include="Features\Cars\Rules\" />
