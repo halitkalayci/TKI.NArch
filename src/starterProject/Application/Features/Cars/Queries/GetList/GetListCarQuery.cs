@@ -22,11 +22,13 @@ public class GetListCarQuery : IRequest<GetListResponse<GetListCarItemDto>>
 {
     // İstek
     public PageRequest PageRequest { get; set; }
+
     public class GetListCarQueryHandler : IRequestHandler<GetListCarQuery, GetListResponse<GetListCarItemDto>>
     {
         // Bağımlılıklar
         private ICarRepository _carRepository;
         private IMapper _mapper;
+
         public GetListCarQueryHandler(ICarRepository carRepository, IMapper mapper)
         {
             _carRepository = carRepository;
@@ -35,7 +37,10 @@ public class GetListCarQuery : IRequest<GetListResponse<GetListCarItemDto>>
 
         public async Task<GetListResponse<GetListCarItemDto>> Handle(GetListCarQuery request, CancellationToken cancellationToken)
         {
-            IPaginate<Car> cars = await _carRepository.GetListAsync(index: request.PageRequest.PageIndex, size:request.PageRequest.PageSize);
+            IPaginate<Car> cars = await _carRepository.GetListAsync(
+                index: request.PageRequest.PageIndex,
+                size: request.PageRequest.PageSize
+            );
 
             GetListResponse<GetListCarItemDto> response = _mapper.Map<GetListResponse<GetListCarItemDto>>(cars);
 

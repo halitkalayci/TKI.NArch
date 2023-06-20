@@ -1,4 +1,4 @@
-﻿using Application.Features.Cars.Queries.GetList;
+﻿using Application.Features.Brands.Queries.GetList;
 using AutoMapper;
 using Core.Application.Responses;
 using Core.Persistence.Paging;
@@ -9,13 +9,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Features.Cars.Profiles;
-
+namespace Application.Features.Brands.Profiles;
 public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Car, GetListCarItemDto>().ReverseMap();
-        CreateMap<IPaginate<Car>, GetListResponse<GetListCarItemDto>>().ReverseMap();
+        CreateMap<Brand, GetListBrandDto>().ReverseMap();
+        CreateMap<IPaginate<Brand>, GetListResponse<GetListBrandDto>>().ReverseMap();
     }
 }

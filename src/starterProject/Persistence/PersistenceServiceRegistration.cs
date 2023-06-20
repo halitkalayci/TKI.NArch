@@ -11,12 +11,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Persistence;
+
 public static class PersistenceServiceRegistration
 {
     public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<BaseDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("BaseDb")));
         services.AddScoped<ICarRepository, CarRepository>();
+        services.AddScoped<IBrandRepository, BrandRepository>();
         return services;
     }
 }

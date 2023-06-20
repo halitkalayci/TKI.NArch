@@ -5,24 +5,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
+
 [Route("api/[controller]")]
 [ApiController]
-public class CarsController : ControllerBase
+public class CarsController : BaseController
 {
-    private IMediator Mediator;
-
-    public CarsController(IMediator mediator)
-    {
-        Mediator = mediator;
-    }
 
     [HttpGet]
     public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest)
     {
-        GetListCarQuery getListCarQuery = new()
-        {
-            PageRequest = pageRequest
-        };
+        GetListCarQuery getListCarQuery = new() { PageRequest = pageRequest };
         var response = await Mediator.Send(getListCarQuery);
         return Ok(response);
     }

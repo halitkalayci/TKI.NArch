@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.Features.Cars.Queries.GetList;
+
 public class GetListCarItemDto : IDto
 {
     public int Id { get; set; }

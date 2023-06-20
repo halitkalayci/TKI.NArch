@@ -7,11 +7,10 @@ namespace Persistence.Contexts
     public class BaseDbContext : DbContext
     {
         public DbSet<Car> Cars { get; set; }
+        public DbSet<Brand> Brands { get; set; }
 
-        public BaseDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
-        {
-            
-        }
+        public BaseDbContext(DbContextOptions dbContextOptions)
+            : base(dbContextOptions) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

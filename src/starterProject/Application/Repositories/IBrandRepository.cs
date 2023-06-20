@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Repositories
-{
-    public interface ICarRepository : IAsyncRepository<Car, long>, IRepository<Car, long> { }
-}
+namespace Application.Repositories;
+
+public interface IBrandRepository : IAsyncRepository<Brand, long>, IRepository<Brand, long> { }

@@ -4,9 +4,9 @@ using Domain.Entities;
 using Persistence.Contexts;
 
 namespace Persistence.Repositories;
-public class CarRepository : EfRepositoryBase<Car,long,BaseDbContext>, ICarRepository
+
+public class CarRepository : EfRepositoryBase<Car, long, BaseDbContext>, ICarRepository
 {
-    public CarRepository(BaseDbContext context) : base(context)
-    {
-    }
+    public CarRepository(BaseDbContext context)
+        : base(context) { }
 }

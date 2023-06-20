@@ -13,29 +13,29 @@ namespace Persistence.Migrations
         {
             migrationBuilder.CreateTable(
                 name: "Cars",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Kilometer = table.Column<int>(type: "int", nullable: false),
-                    Plate = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MinFindeksCreditRate = table.Column<short>(type: "smallint", nullable: false),
-                    State = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
+                columns: table =>
+                    new
+                    {
+                        Id = table.Column<long>(type: "bigint", nullable: false).Annotation("SqlServer:Identity", "1, 1"),
+                        Kilometer = table.Column<int>(type: "int", nullable: false),
+                        Plate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                        MinFindeksCreditRate = table.Column<short>(type: "smallint", nullable: false),
+                        State = table.Column<int>(type: "int", nullable: false),
+                        CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                        UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                        DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cars", x => x.Id);
-                });
+                }
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Cars");
+            migrationBuilder.DropTable(name: "Cars");
         }
     }
 }

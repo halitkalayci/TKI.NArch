@@ -1,12 +1,14 @@
 ﻿using Core.Persistence.Repositories;
-using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Repositories
+namespace Domain.Entities;
+
+public class Brand : Entity<long>
 {
-    public interface ICarRepository : IAsyncRepository<Car, long>, IRepository<Car, long> { }
+    public string Name { get; set; }
+    public string Logo { get; set; }
 }
