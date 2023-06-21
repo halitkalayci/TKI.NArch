@@ -43,6 +43,8 @@ public class LoginCommand : IRequest<LoginCommandResponse>
 
             RefreshToken refreshToken = await _authService.CreateRefreshToken(userToLogin, request.IPAddress);
 
+            await _authService.AddRefreshToken(refreshToken);
+
             return new LoginCommandResponse { AccessToken=accessToken, RefreshToken=refreshToken, RequiredAuthenticatorType=AuthenticatorType.None};
         }
     }

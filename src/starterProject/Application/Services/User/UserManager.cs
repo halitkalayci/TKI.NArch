@@ -14,7 +14,13 @@ public class UserManager : IUserService
 
     public async Task<User> GetByEmail(string email)
     {
-        User? user = await _userRepository.GetAsync(i=>i.Email == email);
+        User? user = await _userRepository.GetAsync(i => i.Email == email);
+        return user;
+    }
+
+    public async Task<User> GetById(int id)
+    {
+        User? user = await _userRepository.GetAsync(i => i.Id == id);
         return user;
     }
 }

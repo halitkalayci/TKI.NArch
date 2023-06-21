@@ -50,4 +50,10 @@ public class AuthManager : IAuthService
 
         return refreshToken;
     }
+
+    public async Task<RefreshToken> GetRefreshToken(string token)
+    {
+        RefreshToken refreshToken = await _refreshTokenRepository.GetAsync(i => i.Token == token);
+        return refreshToken;
+    }
 }

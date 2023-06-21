@@ -33,4 +33,12 @@ public class AuthBusinessRules : BaseBusinessRules
 
         return Task.CompletedTask;
     }
+
+    public Task RefreshTokenMustExist(RefreshToken? refreshToken)
+    {
+        if (refreshToken == null)
+            throw new BusinessException("Böyle bir token bulunamadı.");
+
+        return Task.CompletedTask;
+    }
 }
