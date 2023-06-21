@@ -1,3 +1,4 @@
+using Core.Security.Entities;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -9,6 +10,12 @@ namespace Persistence.Contexts
         public DbSet<Car> Cars { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Model> Models { get; set; }
+
+        public DbSet<User> Users { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
+        public DbSet<EmailAuthenticator> EmailAuthenticators { get; set; }
+
 
         public BaseDbContext(DbContextOptions dbContextOptions)
             : base(dbContextOptions) { }
