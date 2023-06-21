@@ -1,5 +1,6 @@
 ﻿using Application.Features.Auth.Commands.Login;
 using Application.Features.Auth.Commands.RefreshTokenCommand;
+using Application.Features.Auth.Commands.Register;
 using Core.Application.Dtos;
 using Core.Security.Entities;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +22,16 @@ public class AuthController : BaseController
         var response = await Mediator.Send(command);
         setRefreshTokenToCookie(response.RefreshToken);
         return Ok(response.ToHttpResponse());
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterCommand registerCommand)
+    {
+        registerCommand.IPAddress = getIpAddress();
+
+        var response = await Mediator.Send(registerCommand);
+        setRefreshTokenToCookie(response.RefreshToken);
+        return Ok(response.AccessToken);
     }
 
     [HttpPost("refresh-token")]

@@ -12,6 +12,12 @@ public class UserManager : IUserService
         _userRepository = userRepository;
     }
 
+    public async Task<User> Add(User user)
+    {
+        User addedUser = await _userRepository.AddAsync(user);
+        return addedUser;
+    }
+
     public async Task<User> GetByEmail(string email)
     {
         User? user = await _userRepository.GetAsync(i => i.Email == email);
