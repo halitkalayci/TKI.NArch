@@ -23,6 +23,12 @@ public class AuthManager : IAuthService
         _tokenOptions = configuration.GetSection("TokenOptions").Get<TokenOptions>();
     }
 
+    public async Task<RefreshToken> AddRefreshToken(RefreshToken refreshToken)
+    {
+        var addedToken = await _refreshTokenRepository.AddAsync(refreshToken);
+        return addedToken;
+    }
+
     public async Task<AccessToken> CreateAccessToken(User user)
     {
         IList<OperationClaim> userRoles = await _userOperationClaimRepository
@@ -36,11 +42,11 @@ public class AuthManager : IAuthService
         return accessToken;
     }
 
+    // Add işlemini farklı fonksiyona taşıma
+    // RefreshTokenDto
     public async Task<RefreshToken> CreateRefreshToken(User user, string ipAddress)
     {
         RefreshToken refreshToken = _tokenHelper.CreateRefreshToken(user, ipAddress);
-
-        await _refreshTokenRepository.AddAsync(refreshToken);
 
         return refreshToken;
     }

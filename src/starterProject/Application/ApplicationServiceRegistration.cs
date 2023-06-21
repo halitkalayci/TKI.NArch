@@ -1,19 +1,14 @@
-using Application.Features.Cars.Rules;
-using Core.Application.Pipelines.Authorization;
-using Core.CrossCuttingConcerns.Logging.Serilog.Logger;
-using Core.CrossCuttingConcerns.Logging.Serilog;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using FluentValidation;
-using Core.Application.Pipelines.Validation;
+using Application.Services.Auth;
 using Application.Services.Models;
-using Application.Features.Models.Constants;
-using Application.Features.Models.Rules;
+using Application.Services.UserService;
+using Core.Application.Pipelines.Authorization;
+using Core.Application.Pipelines.Validation;
+using Core.Application.Rules;
+using Core.CrossCuttingConcerns.Logging.Serilog;
+using Core.CrossCuttingConcerns.Logging.Serilog.Logger;
+using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Application;
 
@@ -28,13 +23,27 @@ public static class ApplicationServiceRegistration
             config.AddOpenBehavior(typeof(RequestValidationBehavior<,>));
         });
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        services.AddTransient<CarBusinessRules>();
-        services.AddTransient<ModelBusinessRules>();
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
         services.AddTransient<LoggerServiceBase, FileLogger>();
         services.AddScoped<IModelsService, ModelsManager>();
+        services.AddScoped<IAuthService, AuthManager>();
+        services.AddScoped<IUserService, UserManager>();
+
+        services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));
+        return services;
+    }
+
+    public static IServiceCollection AddSubClassesOfType(this IServiceCollection services, Assembly assembly, Type type)
+    {
+        var types = assembly.GetTypes().Where(t => t.IsSubclassOf(type) && type != t).ToList();
+
+        foreach (var item in types)
+        {
+            services.AddScoped(item);
+        }
+
         return services;
     }
 }
