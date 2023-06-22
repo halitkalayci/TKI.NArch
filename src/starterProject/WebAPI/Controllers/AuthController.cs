@@ -1,4 +1,5 @@
-﻿using Application.Features.Auth.Commands.EnableOtpAuthenticator;
+﻿using Application.Features.Auth.Commands.EnableEmailAuthenticator;
+using Application.Features.Auth.Commands.EnableOtpAuthenticator;
 using Application.Features.Auth.Commands.Login;
 using Application.Features.Auth.Commands.RefreshTokenCommand;
 using Application.Features.Auth.Commands.Register;
@@ -59,6 +60,18 @@ public class AuthController : BaseController
 
         var response = await Mediator.Send(enableOtpAuthenticatorCommand);
         return Ok(response);
+    }
+
+    [HttpPost("enable-email-otp")]
+    public async Task<IActionResult> EnableEmailOtp()
+    {
+        EnableEmailAuthenticatorCommand command = new()
+        {
+            UserId = 1,
+            VerifyEmailUrlPrefix = "https://localhost:7046/api/auth/verify-email-otp"
+        };
+        await Mediator.Send(command);
+        return Ok();
     }
 
     [HttpPost("verify-otp")]

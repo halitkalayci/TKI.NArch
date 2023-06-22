@@ -1,5 +1,6 @@
 ﻿using Application.Repositories;
 using Core.CrossCuttingConcerns.Exceptions.Types;
+using Core.Security.EmailAuthenticator;
 using Core.Security.Entities;
 using Core.Security.OtpAuthenticator;
 
@@ -9,11 +10,13 @@ public class AuthenticatorManager : IAuthenticatorService
 {
     private readonly IOtpAuthenticatorRepository _otpAuthenticatorRepository;
     private readonly IOtpAuthenticatorHelper _otpAuthenticatorHelper;
+    private readonly IEmailAuthenticatorHelper _emailAuthenticatorHelper;
 
-    public AuthenticatorManager(IOtpAuthenticatorRepository otpAuthenticatorRepository, IOtpAuthenticatorHelper otpAuthenticatorHelper)
+    public AuthenticatorManager(IOtpAuthenticatorRepository otpAuthenticatorRepository, IOtpAuthenticatorHelper otpAuthenticatorHelper, IEmailAuthenticatorHelper emailAuthenticatorHelper)
     {
         _otpAuthenticatorRepository = otpAuthenticatorRepository;
         _otpAuthenticatorHelper = otpAuthenticatorHelper;
+        _emailAuthenticatorHelper = emailAuthenticatorHelper;
     }
 
     public async Task<string> ConvertSecretKeyToString(byte[] secretKey)
@@ -53,4 +56,14 @@ public class AuthenticatorManager : IAuthenticatorService
             throw new BusinessException("OTP hatalı.");
     }
     private async Task verifyEmailAuthenticator() => throw new NotImplementedException();
+    public async Task<EmailAuthenticator> CreateEmailAuthenticator(User user) {
+
+        EmailAuthenticator authenticator = new()
+        {
+            UserId = user.Id,
+            ActivationKey = await _emailAuthenticatorHelper.CreateEmailActivationKey(),
+            IsVerified = false
+        };
+        return authenticator;
+    }
 }
