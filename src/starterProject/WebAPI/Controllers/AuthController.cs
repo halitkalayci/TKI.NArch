@@ -37,6 +37,12 @@ public class AuthController : BaseController
         return Ok(response.AccessToken);
     }
 
+    [HttpGet("verify-email-otp")]
+    public async Task<IActionResult> VerifyEmail([FromQuery] string activationKey)
+    {
+        return Ok($"Hesabınız bu kod ile doğrulandı: {activationKey}");
+    }
+
     [HttpPost("refresh-token")]
     public async Task<IActionResult> RefreshToken()
     {
@@ -68,7 +74,7 @@ public class AuthController : BaseController
         EnableEmailAuthenticatorCommand command = new()
         {
             UserId = getAuthenticatedUserId(),
-            VerifyEmailUrlPrefix = "https://localhost:7046/api/auth/verify-email-otp"
+            VerifyEmailUrlPrefix = "https://localhost:7206/api/auth/verify-email-otp"
         };
         await Mediator.Send(command);
         return Ok();
