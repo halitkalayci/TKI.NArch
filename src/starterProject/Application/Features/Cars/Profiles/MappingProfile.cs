@@ -1,4 +1,5 @@
 ﻿using Application.Features.Cars.Commands.Create;
+using Application.Features.Cars.Queries.GetDynamic;
 using Application.Features.Cars.Queries.GetList;
 using AutoMapper;
 using Core.Application.Responses;
@@ -18,6 +19,9 @@ public class MappingProfile : Profile
     {
         CreateMap<Car, GetListCarItemDto>().ReverseMap();
         CreateMap<IPaginate<Car>, GetListResponse<GetListCarItemDto>>().ReverseMap();
+
+        CreateMap<Car, GetDynamicCarQueryResponse>().ReverseMap();
+        CreateMap<IPaginate<Car>, GetListResponse<GetDynamicCarQueryResponse>>().ReverseMap();
 
         CreateMap<Car, CreateCarCommand>().ReverseMap();
         CreateMap<CreatedCarDto, Car>().ReverseMap();
