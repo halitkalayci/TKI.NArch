@@ -55,7 +55,7 @@ public class AuthController : BaseController
     {
         EnableOtpAuthenticatorCommand enableOtpAuthenticatorCommand = new()
         {
-            UserId = 1
+            UserId = getAuthenticatedUserId()
         };
 
         var response = await Mediator.Send(enableOtpAuthenticatorCommand);
@@ -67,7 +67,7 @@ public class AuthController : BaseController
     {
         EnableEmailAuthenticatorCommand command = new()
         {
-            UserId = 1,
+            UserId = getAuthenticatedUserId(),
             VerifyEmailUrlPrefix = "https://localhost:7046/api/auth/verify-email-otp"
         };
         await Mediator.Send(command);
@@ -79,7 +79,7 @@ public class AuthController : BaseController
     {
         VerifyOtpAuthenticatorCommand verifyOtpAuthenticatorCommand = new()
         {
-            UserId = 1,
+            UserId = getAuthenticatedUserId(),
             Code=code
         };
         await Mediator.Send(verifyOtpAuthenticatorCommand);

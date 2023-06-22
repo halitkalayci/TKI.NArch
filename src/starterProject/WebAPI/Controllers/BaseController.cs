@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Core.Security.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,5 +20,10 @@ public class BaseController : ControllerBase
             return Request.Headers["X-Forwarded-For"];
 
         return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+    }
+    protected int getAuthenticatedUserId()
+    {
+        int userId = HttpContext.User.GetUserId();
+        return userId;
     }
 }
