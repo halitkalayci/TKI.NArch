@@ -29,4 +29,9 @@ public class UserManager : IUserService
         User? user = await _userRepository.GetAsync(i => i.Id == id);
         return user;
     }
+
+    public async Task Update(User user)
+    {
+        await _userRepository.UpdateAsync(user);
+    }
 }

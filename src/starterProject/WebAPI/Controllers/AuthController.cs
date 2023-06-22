@@ -2,6 +2,7 @@
 using Application.Features.Auth.Commands.Login;
 using Application.Features.Auth.Commands.RefreshTokenCommand;
 using Application.Features.Auth.Commands.Register;
+using Application.Features.Auth.Commands.VerifyOtpAuthenticator;
 using Core.Application.Dtos;
 using Core.Security.Entities;
 using Microsoft.AspNetCore.Http;
@@ -58,6 +59,18 @@ public class AuthController : BaseController
 
         var response = await Mediator.Send(enableOtpAuthenticatorCommand);
         return Ok(response);
+    }
+
+    [HttpPost("verify-otp")]
+    public async Task<IActionResult> VerifyOtp([FromBody] string code)
+    {
+        VerifyOtpAuthenticatorCommand verifyOtpAuthenticatorCommand = new()
+        {
+            UserId = 1,
+            Code=code
+        };
+        await Mediator.Send(verifyOtpAuthenticatorCommand);
+        return Ok();
     }
 
     private string getRefreshTokenFromCookie => Request.Cookies["refreshToken"];
