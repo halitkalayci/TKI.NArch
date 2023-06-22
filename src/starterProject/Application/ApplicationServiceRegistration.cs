@@ -1,4 +1,5 @@
 using Application.Services.Auth;
+using Application.Services.Authenticator;
 using Application.Services.Models;
 using Application.Services.UserService;
 using Core.Application.Pipelines.Authorization;
@@ -30,6 +31,7 @@ public static class ApplicationServiceRegistration
         services.AddScoped<IModelsService, ModelsManager>();
         services.AddScoped<IAuthService, AuthManager>();
         services.AddScoped<IUserService, UserManager>();
+        services.AddScoped<IAuthenticatorService,AuthenticatorManager>();
 
         services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));
         return services;
