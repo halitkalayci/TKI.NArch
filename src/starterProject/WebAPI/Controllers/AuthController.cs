@@ -1,4 +1,5 @@
-﻿using Application.Features.Auth.Commands.Login;
+﻿using Application.Features.Auth.Commands.EnableOtpAuthenticator;
+using Application.Features.Auth.Commands.Login;
 using Application.Features.Auth.Commands.RefreshTokenCommand;
 using Application.Features.Auth.Commands.Register;
 using Core.Application.Dtos;
@@ -45,6 +46,18 @@ public class AuthController : BaseController
         var response = await Mediator.Send(command);
         setRefreshTokenToCookie(response.RefreshToken);
         return Ok(response.AccessToken);
+    }
+
+    [HttpPost("enable-otp")]
+    public async Task<IActionResult> EnableOtp()
+    {
+        EnableOtpAuthenticatorCommand enableOtpAuthenticatorCommand = new()
+        {
+            UserId = 1
+        };
+
+        var response = await Mediator.Send(enableOtpAuthenticatorCommand);
+        return Ok(response);
     }
 
     private string getRefreshTokenFromCookie => Request.Cookies["refreshToken"];

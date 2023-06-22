@@ -9,6 +9,13 @@ public class AuthenticatorManager : IAuthenticatorService
 {
     private readonly IOtpAuthenticatorRepository _otpAuthenticatorRepository;
     private readonly IOtpAuthenticatorHelper _otpAuthenticatorHelper;
+
+    public AuthenticatorManager(IOtpAuthenticatorRepository otpAuthenticatorRepository, IOtpAuthenticatorHelper otpAuthenticatorHelper)
+    {
+        _otpAuthenticatorRepository = otpAuthenticatorRepository;
+        _otpAuthenticatorHelper = otpAuthenticatorHelper;
+    }
+
     public async Task<string> ConvertSecretKeyToString(byte[] secretKey)
     {
         string result = await _otpAuthenticatorHelper.ConvertSecretKeyToString(secretKey);
