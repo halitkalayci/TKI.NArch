@@ -59,7 +59,7 @@ public class EnableEmailAuthenticatorCommand : IRequest
             {
                 ToList = emailList,
                 Subject = "TKI Rent A Car - Hesabınızı Doğrulayın",
-                HtmlBody = $"TKİ'ye hoşgeldiniz. Hesabınızı doğrulamak için bu linke tıklayınız: {request.VerifyEmailUrlPrefix}?ActivationKey={HttpUtility.UrlEncode(addedEmailAuthenticator.ActivationKey)}"
+                HtmlBody = $"<img style='max-height:350px' src='https://www.tki.gov.tr/images/logo.svg'/> TKI'ye hosgeldiniz. Hesabinizi dogrulamak için <a href='{request.VerifyEmailUrlPrefix}?ActivationKey={HttpUtility.UrlEncode(addedEmailAuthenticator.ActivationKey)}'> buraya </a> tiklayiniz"
             });    
         }
     }
