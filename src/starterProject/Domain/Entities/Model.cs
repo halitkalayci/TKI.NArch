@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Domain.Entities;
 public class Model : Entity<long>
 {
-    public int BrandId { get; set; }
+    public long BrandId { get; set; }
     public virtual Brand Brand { get; set; }
     public string Name { get; set; }
 }
