@@ -31,6 +31,7 @@ public static class PersistenceServiceRegistration
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
 
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
         return services;
     }
 }

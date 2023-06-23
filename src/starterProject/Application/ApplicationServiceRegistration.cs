@@ -12,6 +12,7 @@ using Core.Mailing.MailKitImplementations;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Application.Services.Customers;
 
 namespace Application;
 
@@ -37,6 +38,7 @@ public static class ApplicationServiceRegistration
         services.AddScoped<IMailService, MailKitMailService>();
 
         services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));
+        services.AddScoped<ICustomersService, CustomersManager>();
         return services;
     }
 
