@@ -3,6 +3,7 @@ using Application.Features.Auth.Commands.EnableOtpAuthenticator;
 using Application.Features.Auth.Commands.Login;
 using Application.Features.Auth.Commands.RefreshTokenCommand;
 using Application.Features.Auth.Commands.Register;
+using Application.Features.Auth.Commands.VerifyEmail;
 using Application.Features.Auth.Commands.VerifyOtpAuthenticator;
 using Core.Application.Dtos;
 using Core.Security.Entities;
@@ -40,7 +41,13 @@ public class AuthController : BaseController
     [HttpGet("verify-email-otp")]
     public async Task<IActionResult> VerifyEmail([FromQuery] string activationKey)
     {
-        return Ok($"Hesabınız bu kod ile doğrulandı: {activationKey}");
+        // VerifyEmailCommand
+        VerifyEmailCommand verifyEmailCommand = new VerifyEmailCommand()
+        {
+            ActivationKey = activationKey
+        };
+        await Mediator.Send(verifyEmailCommand);
+        return Ok();
     }
 
     [HttpPost("refresh-token")]

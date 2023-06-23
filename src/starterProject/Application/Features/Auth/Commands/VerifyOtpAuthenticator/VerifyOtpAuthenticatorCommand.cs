@@ -2,6 +2,7 @@
 using Application.Repositories;
 using Application.Services.Authenticator;
 using Application.Services.UserService;
+using Core.Application.Pipelines.Authorization;
 using Core.Security.Entities;
 using MediatR;
 using System;
@@ -11,10 +12,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.Features.Auth.Commands.VerifyOtpAuthenticator;
-public class VerifyOtpAuthenticatorCommand : IRequest
+public class VerifyOtpAuthenticatorCommand : IRequest, ISecuredRequest
 {
     public int UserId { get; set; }
     public string Code { get; set; }
+
+    public string[] Roles => new string[] { };
 
     public class VerifyOtpAuthenticatorCommandHandler : IRequestHandler<VerifyOtpAuthenticatorCommand>
     {

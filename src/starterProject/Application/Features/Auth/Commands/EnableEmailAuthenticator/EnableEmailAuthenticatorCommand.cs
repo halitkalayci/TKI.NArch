@@ -2,6 +2,7 @@
 using Application.Repositories;
 using Application.Services.Authenticator;
 using Application.Services.UserService;
+using Core.Application.Pipelines.Authorization;
 using Core.Mailing;
 using Core.Security.Entities;
 using MediatR;
@@ -14,10 +15,12 @@ using System.Threading.Tasks;
 using System.Web;
 
 namespace Application.Features.Auth.Commands.EnableEmailAuthenticator;
-public class EnableEmailAuthenticatorCommand : IRequest
+public class EnableEmailAuthenticatorCommand : IRequest, ISecuredRequest
 {
     public int UserId { get; set; }
     public string VerifyEmailUrlPrefix { get; set; }
+
+    public string[] Roles => new string[] { };
 
     public class EnableEmailAuthenticatorCommandHandler : IRequestHandler<EnableEmailAuthenticatorCommand>
     {

@@ -48,4 +48,10 @@ public class AuthBusinessRules : BaseBusinessRules
         if (user != null)
             throw new BusinessException("Bu email ile kayıtlı bir kullanıcı zaten mevcut");
     }
+
+    public async Task EmailAuthenticatorMustExist(EmailAuthenticator? emailAuthenticator)
+    {
+        if (emailAuthenticator == null)
+            throw new BusinessException("Böyle bir verification kodu bulunamadı.");
+    }
 }

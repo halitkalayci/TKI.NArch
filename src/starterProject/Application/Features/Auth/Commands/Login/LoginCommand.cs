@@ -46,6 +46,7 @@ public class LoginCommand : IRequest<LoginCommandResponse>
                 if(request.UserForLoginDto.AuthenticatorCode is null)
                 {
                     // email
+                    // emaile bir kod gönderip isteğin giden kod ile tekrar atılmasını iste.
                 }
 
                 await _authenticatorService.VerifyOtpAuthenticator(userToLogin, request.UserForLoginDto.AuthenticatorCode);
@@ -57,7 +58,7 @@ public class LoginCommand : IRequest<LoginCommandResponse>
 
             await _authService.AddRefreshToken(refreshToken);
 
-            return new LoginCommandResponse { AccessToken=accessToken, RefreshToken=refreshToken, RequiredAuthenticatorType=AuthenticatorType.None};
+            return new LoginCommandResponse { AccessToken=accessToken, RefreshToken=refreshToken, RequiredAuthenticatorType=userToLogin.AuthenticatorType};
         }
     }
 
