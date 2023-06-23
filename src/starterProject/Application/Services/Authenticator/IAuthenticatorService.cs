@@ -12,4 +12,5 @@ public interface IAuthenticatorService
     Task<OtpAuthenticator> CreateOtpAuthenticator(User user);
     Task<string> ConvertSecretKeyToString(byte[] secretKey);
     Task VerifyOtpAuthenticator(User user, string code);
+    Task SendAuthenticatorCode(User user);
 }

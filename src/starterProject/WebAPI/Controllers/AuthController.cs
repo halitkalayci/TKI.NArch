@@ -102,6 +102,8 @@ public class AuthController : BaseController
     private string getRefreshTokenFromCookie => Request.Cookies["refreshToken"];
     private void setRefreshTokenToCookie(RefreshToken refreshToken)
     {
+        if (refreshToken == null)
+            return;
         CookieOptions cookieOptions = new() { HttpOnly = true, Expires=DateTime.UtcNow.AddDays(7) };
         Response.Cookies.Append(key:"refreshToken", refreshToken.Token, cookieOptions);
     }

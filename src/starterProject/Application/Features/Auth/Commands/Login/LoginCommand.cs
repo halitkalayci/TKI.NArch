@@ -43,10 +43,11 @@ public class LoginCommand : IRequest<LoginCommandResponse>
 
             if (userToLogin.AuthenticatorType is not AuthenticatorType.None)
             {
-                if(request.UserForLoginDto.AuthenticatorCode is null)
+                if(userToLogin.AuthenticatorType is AuthenticatorType.Email && string.IsNullOrEmpty(request.UserForLoginDto.AuthenticatorCode))
                 {
-                    // email
-                    // emaile bir kod gönderip isteğin giden kod ile tekrar atılmasını iste.
+                    await _authenticatorService.SendAuthenticatorCode(userToLogin);
+
+                    return new LoginCommandResponse() { AccessToken = null, RefreshToken = null, RequiredAuthenticatorType = AuthenticatorType.Email };
                 }
 
                 await _authenticatorService.VerifyOtpAuthenticator(userToLogin, request.UserForLoginDto.AuthenticatorCode);

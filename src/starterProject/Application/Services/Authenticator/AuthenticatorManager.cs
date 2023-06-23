@@ -1,8 +1,10 @@
 ﻿using Application.Repositories;
 using Core.CrossCuttingConcerns.Exceptions.Types;
+using Core.Mailing;
 using Core.Security.EmailAuthenticator;
 using Core.Security.Entities;
 using Core.Security.OtpAuthenticator;
+using MimeKit;
 
 namespace Application.Services.Authenticator;
 
@@ -11,12 +13,16 @@ public class AuthenticatorManager : IAuthenticatorService
     private readonly IOtpAuthenticatorRepository _otpAuthenticatorRepository;
     private readonly IOtpAuthenticatorHelper _otpAuthenticatorHelper;
     private readonly IEmailAuthenticatorHelper _emailAuthenticatorHelper;
+    private readonly IEmailAuthenticatorRepository _emailAuthenticatorRepository;
+    private readonly IMailService _mailService;
 
-    public AuthenticatorManager(IOtpAuthenticatorRepository otpAuthenticatorRepository, IOtpAuthenticatorHelper otpAuthenticatorHelper, IEmailAuthenticatorHelper emailAuthenticatorHelper)
+    public AuthenticatorManager(IOtpAuthenticatorRepository otpAuthenticatorRepository, IOtpAuthenticatorHelper otpAuthenticatorHelper, IEmailAuthenticatorHelper emailAuthenticatorHelper, IEmailAuthenticatorRepository emailAuthenticatorRepository, IMailService mailService)
     {
         _otpAuthenticatorRepository = otpAuthenticatorRepository;
         _otpAuthenticatorHelper = otpAuthenticatorHelper;
         _emailAuthenticatorHelper = emailAuthenticatorHelper;
+        _emailAuthenticatorRepository = emailAuthenticatorRepository;
+        _mailService = mailService;
     }
 
     public async Task<string> ConvertSecretKeyToString(byte[] secretKey)
@@ -65,5 +71,34 @@ public class AuthenticatorManager : IAuthenticatorService
             IsVerified = false
         };
         return authenticator;
+    }
+
+    public async Task SendAuthenticatorCode(User user)
+    {
+        if (user.AuthenticatorType is not Core.Security.Enums.AuthenticatorType.Email)
+            throw new BusinessException("Kullanıcı otp olarak email kullanmıyor.");
+
+        EmailAuthenticator? emailAuthenticator = await _emailAuthenticatorRepository.GetAsync(i=>i.UserId == user.Id && i.IsVerified);
+
+        if (emailAuthenticator == null)
+            throw new BusinessException("Kullanıcının onaylanmış bir emaili yok.");
+
+        // KOD oluştur, mail
+        string authenticatorCode = await _emailAuthenticatorHelper.CreateEmailActivationCode();
+
+        var toList = new List<MailboxAddress>()
+        {
+            new MailboxAddress($"{user.FirstName} {user.LastName}", user.Email)
+        };
+
+        emailAuthenticator.ActivationKey = authenticatorCode;
+        await _emailAuthenticatorRepository.UpdateAsync(emailAuthenticator);
+
+        _mailService.SendMail(new Mail()
+        {
+            ToList = toList,
+            Subject = "TKI'ye tekrar hoşgeldiniz",
+            HtmlBody = $"TKI'ye hoşgeldiniz giriş yapmak için aşağıdaki kodu kullanabilirsiniz. <br/> {authenticatorCode}"
+        });
     }
 }
