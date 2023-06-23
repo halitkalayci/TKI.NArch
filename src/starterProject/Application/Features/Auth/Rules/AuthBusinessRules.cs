@@ -25,6 +25,13 @@ public class AuthBusinessRules : BaseBusinessRules
             throw new BusinessException("Böyle bir kullanıcı bulunamadı.");
         return Task.CompletedTask;
     }
+    public Task UserMustHaveOtp(User? user)
+    {
+        if (user.AuthenticatorType is Core.Security.Enums.AuthenticatorType.None)
+            throw new BusinessException("Kullanıcı hali hazırda otp sahibi değil.");
+
+        return Task.CompletedTask;
+    }
 
     public Task UserPasswordMustMatch(User? user, string password)
     {

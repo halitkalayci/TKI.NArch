@@ -3,6 +3,7 @@ using Application.Features.Auth.Commands.EnableOtpAuthenticator;
 using Application.Features.Auth.Commands.Login;
 using Application.Features.Auth.Commands.RefreshTokenCommand;
 using Application.Features.Auth.Commands.Register;
+using Application.Features.Auth.Commands.RemoveOtp;
 using Application.Features.Auth.Commands.VerifyEmail;
 using Application.Features.Auth.Commands.VerifyOtpAuthenticator;
 using Core.Application.Dtos;
@@ -47,6 +48,18 @@ public class AuthController : BaseController
             ActivationKey = activationKey
         };
         await Mediator.Send(verifyEmailCommand);
+        return Ok();
+    }
+
+    [HttpPost("remove-otp")]
+    public async Task<IActionResult> RemoveOtp([FromBody] string? code)
+    {
+        RemoveOtpCommand removeOtpCommand = new RemoveOtpCommand()
+        {
+            Code = code,
+            UserId = getAuthenticatedUserId()
+        };
+        await Mediator.Send(removeOtpCommand);
         return Ok();
     }
 
