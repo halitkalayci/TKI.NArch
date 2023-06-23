@@ -44,7 +44,7 @@ public class AuthenticatorManager : IAuthenticatorService
     public async Task VerifyOtpAuthenticator(User user, string code)
     {
         if (user.AuthenticatorType == Core.Security.Enums.AuthenticatorType.Email)
-            await verifyEmailAuthenticator();
+            await verifyEmailAuthenticator(user,code);
         else if (user.AuthenticatorType == Core.Security.Enums.AuthenticatorType.Otp)
             await verifyOtpAuthenticator(user,code);
     }
@@ -61,7 +61,16 @@ public class AuthenticatorManager : IAuthenticatorService
         if (!result)
             throw new BusinessException("OTP hatalı.");
     }
-    private async Task verifyEmailAuthenticator() => throw new NotImplementedException();
+    private async Task verifyEmailAuthenticator(User user, string code)
+    {
+        EmailAuthenticator? emailAuthenticator = await _emailAuthenticatorRepository.GetAsync(i=>i.UserId==user.Id && i.ActivationKey == code);
+
+        if (emailAuthenticator == null)
+            throw new BusinessException("OTP hatalı");
+
+        emailAuthenticator.ActivationKey = null;
+        await _emailAuthenticatorRepository.UpdateAsync(emailAuthenticator);
+    }
     public async Task<EmailAuthenticator> CreateEmailAuthenticator(User user) {
 
         EmailAuthenticator authenticator = new()
