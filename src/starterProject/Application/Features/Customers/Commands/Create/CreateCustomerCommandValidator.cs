@@ -6,7 +6,6 @@ public class CreateCustomerCommandValidator : AbstractValidator<CreateCustomerCo
 {
     public CreateCustomerCommandValidator()
     {
-        RuleFor(c => c.UserId).NotEmpty();
         RuleFor(c => c.CustomerNo).NotEmpty();
     }
 }

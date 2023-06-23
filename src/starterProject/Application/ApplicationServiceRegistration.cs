@@ -13,6 +13,7 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Application.Services.Customers;
+using Core.Application.Pipelines.Transaction;
 
 namespace Application;
 
@@ -25,6 +26,7 @@ public static class ApplicationServiceRegistration
             config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
             config.AddOpenBehavior(typeof(AuthorizationBehavior<,>));
             config.AddOpenBehavior(typeof(RequestValidationBehavior<,>));
+            config.AddOpenBehavior(typeof(TransactionScopeBehavior<,>));
         });
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

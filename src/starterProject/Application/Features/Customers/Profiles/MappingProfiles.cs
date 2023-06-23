@@ -7,6 +7,7 @@ using AutoMapper;
 using Core.Application.Responses;
 using Domain.Entities;
 using Core.Persistence.Paging;
+using Core.Security.Entities;
 
 namespace Application.Features.Customers.Profiles;
 
@@ -22,6 +23,7 @@ public class MappingProfiles : Profile
         CreateMap<Customer, DeletedCustomerResponse>().ReverseMap();
         CreateMap<Customer, GetByIdCustomerResponse>().ReverseMap();
         CreateMap<Customer, GetListCustomerListItemDto>().ReverseMap();
+        CreateMap<User, CreateCustomerCommand>().ReverseMap();
         CreateMap<IPaginate<Customer>, GetListResponse<GetListCustomerListItemDto>>().ReverseMap();
     }
 }
