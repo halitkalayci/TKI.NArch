@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Core.Security.Encryption;
 using Microsoft.OpenApi.Models;
 using Infrastructure;
+using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +44,12 @@ builder.Services.AddSwaggerGen(opt =>
         }, new string[] { } }
     });
 });
+builder.Services.AddHangfire(config =>
+{
+    config.UseSqlServerStorage(builder.Configuration.GetConnectionString("HangfireDb"));
+});
+builder.Services.AddHangfireServer();
+
 
 const string tokenOptionsConfigurationSection = "TokenOptions";
 TokenOptions tokenOptions = builder.Configuration.GetSection(tokenOptionsConfigurationSection).Get<TokenOptions>();
@@ -72,6 +79,8 @@ if (app.Environment.IsDevelopment())
 app.ConfigureCustomExceptionMiddleware();
 
 app.UseHttpsRedirection();
+
+app.UseHangfireDashboard("/hangfire");
 
 app.UseAuthorization();
 
