@@ -5,6 +5,7 @@ using Core.Application.Requests;
 using Core.Application.Responses;
 using Core.Persistence.Paging;
 using Domain.Entities;
+using Infrastructure.Payment.Adapters;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace Application.Features.Cars.Queries.GetList;
 
 // Kullanıcıdan talep edilecek bağımlılıklar Query/Command içerisine
 // Talepe verilecek cevap için gerekli bağımlılıklar Handler içerisine eklenmeli.
-public class GetListCarQuery : IRequest<GetListResponse<GetListCarItemDto>>, ISecuredRequest
+public class GetListCarQuery : IRequest<GetListResponse<GetListCarItemDto>>
 {
     // İstek
     public PageRequest PageRequest { get; set; }
@@ -31,11 +32,13 @@ public class GetListCarQuery : IRequest<GetListResponse<GetListCarItemDto>>, ISe
         // Bağımlılıklar
         private ICarRepository _carRepository;
         private IMapper _mapper;
+        private IPosServiceAdapter _posServiceAdapter;
 
-        public GetListCarQueryHandler(ICarRepository carRepository, IMapper mapper)
+        public GetListCarQueryHandler(ICarRepository carRepository, IMapper mapper, IPosServiceAdapter posServiceAdapter)
         {
             _carRepository = carRepository;
             _mapper = mapper;
+            _posServiceAdapter = posServiceAdapter;
         }
 
         public async Task<GetListResponse<GetListCarItemDto>> Handle(GetListCarQuery request, CancellationToken cancellationToken)
@@ -46,7 +49,7 @@ public class GetListCarQuery : IRequest<GetListResponse<GetListCarItemDto>>, ISe
             );
 
             GetListResponse<GetListCarItemDto> response = _mapper.Map<GetListResponse<GetListCarItemDto>>(cars);
-
+            _posServiceAdapter.Pay("123", 123, DateTime.Now);
             return response;
         }
     }

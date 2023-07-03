@@ -8,6 +8,7 @@ using Core.Security.JWT;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Core.Security.Encryption;
 using Microsoft.OpenApi.Models;
+using Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddSecurityServices();
 builder.Services.AddApplicationServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
+builder.Services.AddInfrastructureServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(opt =>
 {
