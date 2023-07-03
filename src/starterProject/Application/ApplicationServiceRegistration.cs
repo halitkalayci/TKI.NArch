@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Application.Services.Customers;
 using Core.Application.Pipelines.Transaction;
+using Application.Services.Rentals;
 
 namespace Application;
 
@@ -41,6 +42,7 @@ public static class ApplicationServiceRegistration
 
         services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));
         services.AddScoped<ICustomersService, CustomersManager>();
+        services.AddScoped<IRentalsService, RentalsManager>();
         return services;
     }
 
