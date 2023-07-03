@@ -50,7 +50,6 @@ builder.Services.AddHangfire(config =>
 });
 builder.Services.AddHangfireServer();
 
-
 const string tokenOptionsConfigurationSection = "TokenOptions";
 TokenOptions tokenOptions = builder.Configuration.GetSection(tokenOptionsConfigurationSection).Get<TokenOptions>();
 
@@ -85,5 +84,12 @@ app.UseHangfireDashboard("/hangfire");
 app.UseAuthorization();
 
 app.MapControllers();
-
+/*
+// Loglamalar
+// Kiralama sonrasý kullanýcýya hatýrlatma mesajý => CreateRentalCommand.cs
+var fireandForgetJobId = BackgroundJob.Enqueue(() => Console.WriteLine("Background Job Çalýþtý")); // Fire and Forget
+var scheduleJobId = BackgroundJob.Schedule(() => Console.WriteLine("Background job schedule çalýþtý"), TimeSpan.FromSeconds(60)); // Delayed Jobs => Belirli bir vakit sonrasý çalýþtýrýlmasýný istediðimiz iþler
+RecurringJob.AddOrUpdate("logger", () => Console.WriteLine("Loggger çalýþtý."), Cron.Minutely);
+BackgroundJob.ContinueJobWith(fireandForgetJobId, () => Console.WriteLine("FireAndForget bitti.")); // Continuations
+*/
 app.Run();
