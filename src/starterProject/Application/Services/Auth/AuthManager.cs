@@ -31,6 +31,7 @@ public class AuthManager : IAuthService
 
     public async Task<AccessToken> CreateAccessToken(User user)
     {
+
         IList<OperationClaim> userRoles = await _userOperationClaimRepository
             .Query()
             .Where(i => i.UserId == user.Id)

@@ -9,5 +9,6 @@ public class UserOperationClaimRepository : EfRepositoryBase<UserOperationClaim,
 {
     public UserOperationClaimRepository(BaseDbContext context) : base(context)
     {
+       
     }
 }
