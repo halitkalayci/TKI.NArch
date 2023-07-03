@@ -1,13 +1,17 @@
 ﻿using Application.Features.Cars.Rules;
 using Application.Repositories;
 using AutoMapper;
+using Core.Mailing;
 using Domain.Entities;
+using Hangfire;
 using Infrastructure.Payment.Adapters;
 using Infrastructure.Payment.Services;
+using MailKit;
 using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,13 +29,15 @@ public class CreateCarCommand : IRequest<CreatedCarDto>
         private ICarRepository _carRepository;
         private IPosServiceAdapter _posServiceAdapter;
         private CarBusinessRules _carBusinessRules;
+        private Core.Mailing.IMailService _mailService;
 
-        public CreateCarCommandHandler(IMapper mapper, ICarRepository carRepository, CarBusinessRules carBusinessRules, IPosServiceAdapter posServiceAdapter)
+        public CreateCarCommandHandler(IMapper mapper, ICarRepository carRepository, CarBusinessRules carBusinessRules, IPosServiceAdapter posServiceAdapter, Core.Mailing.IMailService mailService)
         {
             _mapper = mapper;
             _carRepository = carRepository;
             _carBusinessRules = carBusinessRules;
             _posServiceAdapter = posServiceAdapter;
+            _mailService = mailService;
         }
 
         public async Task<CreatedCarDto> Handle(CreateCarCommand request, CancellationToken cancellationToken)
@@ -48,8 +54,22 @@ public class CreateCarCommand : IRequest<CreatedCarDto>
             // Sıkı Bağımlılık
             // StripePayment stripePayment = new StripePayment();
             // stripePayment.MakePayment("123", "612", "12/27");
-            _posServiceAdapter.Pay("",123,DateTime.Now);
+            _posServiceAdapter.Pay("", 123, DateTime.Now);
+            var jobId = BackgroundJob.Schedule(() => sendMail(), TimeSpan.FromSeconds(30));
+            // Loglama => Continuations
             return dto;
+        }
+        // Hangfirein çağıracağı metotlar public olmalı.
+        public void sendMail()
+        {
+            var mail = new Mail();
+            mail.Subject = "Yeni araba eklendi";
+            mail.HtmlBody = "Yeni araba eklemesi yapıldı. Paneli kontrol ediniz.";
+            mail.ToList = new List<MimeKit.MailboxAddress>()
+            {
+                    new MimeKit.MailboxAddress("Halit Kalaycı","halit@kodlama.io")
+            };
+            _mailService.SendMail(mail);
         }
     }
 }
