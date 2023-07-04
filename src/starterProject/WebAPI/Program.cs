@@ -49,6 +49,7 @@ builder.Services.AddHangfire(config =>
     config.UseSqlServerStorage(builder.Configuration.GetConnectionString("HangfireDb"));
 });
 builder.Services.AddHangfireServer();
+builder.Services.AddCors(opt => opt.AddDefaultPolicy(p=> p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
 const string tokenOptionsConfigurationSection = "TokenOptions";
 TokenOptions tokenOptions = builder.Configuration.GetSection(tokenOptionsConfigurationSection).Get<TokenOptions>();
@@ -82,7 +83,7 @@ app.UseHttpsRedirection();
 app.UseHangfireDashboard("/hangfire");
 
 app.UseAuthorization();
-
+app.UseCors(opt => opt.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader().AllowCredentials());
 app.MapControllers();
 /*
 // Loglamalar
