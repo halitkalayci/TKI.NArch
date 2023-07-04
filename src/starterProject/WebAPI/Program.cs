@@ -83,7 +83,7 @@ app.UseHttpsRedirection();
 app.UseHangfireDashboard("/hangfire");
 
 app.UseAuthorization();
-app.UseCors(opt => opt.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader().AllowCredentials());
+app.UseCors(opt => opt.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
 app.MapControllers();
 /*
 // Loglamalar
