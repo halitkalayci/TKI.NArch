@@ -20,7 +20,7 @@ namespace Application.Features.Cars.Queries.GetList;
 
 // Kullanıcıdan talep edilecek bağımlılıklar Query/Command içerisine
 // Talepe verilecek cevap için gerekli bağımlılıklar Handler içerisine eklenmeli.
-public class GetListCarQuery : IRequest<GetListResponse<GetListCarItemDto>>
+public class GetListCarQuery : IRequest<GetListResponse<GetListCarItemDto>>, ISecuredRequest
 {
     // İstek
     public PageRequest PageRequest { get; set; }
