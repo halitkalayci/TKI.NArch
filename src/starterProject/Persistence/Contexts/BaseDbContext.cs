@@ -17,6 +17,7 @@ namespace Persistence.Contexts
         public DbSet<EmailAuthenticator> EmailAuthenticators { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Rental> Rentals { get; set; }
+        public DbSet<OtpAuthenticator> OtpAuthenticator { get; set; }
 
 
         public BaseDbContext(DbContextOptions dbContextOptions)

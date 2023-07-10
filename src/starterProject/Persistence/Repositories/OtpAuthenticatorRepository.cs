@@ -9,4 +9,9 @@ public class OtpAuthenticatorRepository : EfRepositoryBase<OtpAuthenticator, int
 {
     public OtpAuthenticatorRepository(BaseDbContext context)
         : base(context) { }
+
+    public OtpAuthenticator GetLatestAuthenticator(int userId)
+    {
+        return Context.OtpAuthenticator.OrderByDescending(i => i.Id).FirstOrDefault(i => i.UserId == userId);
+    }
 }

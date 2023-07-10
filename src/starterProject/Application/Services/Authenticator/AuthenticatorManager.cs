@@ -51,7 +51,7 @@ public class AuthenticatorManager : IAuthenticatorService
 
     private async Task verifyOtpAuthenticator(User user, string code)
     {
-        OtpAuthenticator authenticator = await _otpAuthenticatorRepository.GetAsync(i=>i.UserId==user.Id);
+        OtpAuthenticator authenticator = _otpAuthenticatorRepository.GetLatestAuthenticator(user.Id);
 
         if (authenticator is null)
             throw new BusinessException("Kullanıcı için bir otp oluşturulmamış.");

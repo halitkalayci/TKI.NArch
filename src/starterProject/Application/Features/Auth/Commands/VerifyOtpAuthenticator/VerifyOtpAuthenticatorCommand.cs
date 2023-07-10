@@ -36,7 +36,7 @@ public class VerifyOtpAuthenticatorCommand : IRequest, ISecuredRequest
 
         public async Task Handle(VerifyOtpAuthenticatorCommand request, CancellationToken cancellationToken)
         {
-            OtpAuthenticator otp = await _otpAuthenticatorRepository.GetAsync(i => i.UserId == request.UserId);
+            OtpAuthenticator otp = _otpAuthenticatorRepository.GetLatestAuthenticator(request.UserId);
 
             //Todo: otp business rules
 

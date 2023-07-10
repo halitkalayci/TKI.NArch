@@ -101,14 +101,10 @@ public class AuthController : BaseController
     }
 
     [HttpPost("verify-otp")]
-    public async Task<IActionResult> VerifyOtp([FromBody] string code)
+    public async Task<IActionResult> VerifyOtp([FromBody]VerifyOtpAuthenticatorCommand otp)
     {
-        VerifyOtpAuthenticatorCommand verifyOtpAuthenticatorCommand = new()
-        {
-            UserId = getAuthenticatedUserId(),
-            Code=code
-        };
-        await Mediator.Send(verifyOtpAuthenticatorCommand);
+        otp.UserId = getAuthenticatedUserId();
+        await Mediator.Send(otp);
         return Ok();
     }
 
