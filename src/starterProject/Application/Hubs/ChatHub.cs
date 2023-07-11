@@ -8,7 +8,10 @@ using System.Threading.Tasks;
 namespace Application.Hubs;
 public class ChatHub : Hub
 {
-
+    public async Task SendMessageAsync(string message)
+    {
+        await Clients.Others.SendAsync("MessageReceived",message);
+    }
     public override Task OnConnectedAsync()
     {
         var x = Clients;
