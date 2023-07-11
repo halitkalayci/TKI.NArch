@@ -10,6 +10,7 @@ using Core.Security.Encryption;
 using Microsoft.OpenApi.Models;
 using Infrastructure;
 using Hangfire;
+using Application.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,7 @@ builder.Services.AddApplicationServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSignalR(opt =>{});
 builder.Services.AddSwaggerGen(opt =>
 {
     opt.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme()
@@ -80,11 +82,19 @@ app.ConfigureCustomExceptionMiddleware();
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
 app.UseHangfireDashboard("/hangfire");
 
 app.UseAuthorization();
 app.UseCors(opt => opt.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
-app.MapControllers();
+
+app.UseEndpoints((endpoints) =>
+{
+    endpoints.MapControllers();
+    endpoints.MapHub<ChatHub>("/api/chathub");
+    // Hub endpointleri maple
+});
 /*
 // Loglamalar
 // Kiralama sonrasý kullanýcýya hatýrlatma mesajý => CreateRentalCommand.cs
