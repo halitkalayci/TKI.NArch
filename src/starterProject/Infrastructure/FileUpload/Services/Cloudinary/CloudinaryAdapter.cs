@@ -10,7 +10,7 @@ public class CloudinaryAdapter : IFileUploadAdapter
         Account account = new Account("dusm8cdbj", "816141497288549", "HNgo1lyYqrN8uOv0VhkPTDtjYGE");
 
         CloudinaryDotNet.Cloudinary cloudinary = new CloudinaryDotNet.Cloudinary(account);
-
+       
         var parameters = new ImageUploadParams()
         {
             File = new FileDescription(fileBase64),
