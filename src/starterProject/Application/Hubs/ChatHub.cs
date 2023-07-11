@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 namespace Application.Hubs;
 public class ChatHub : Hub
 {
-    public Dictionary<string, string> Messages = new Dictionary<string, string>();
+    static List<Message> Messages = new();
     public async Task SendMessageAsync(string message, string callerId)
     {
-        Messages.Add(callerId,message);
+        Messages.Add(new Message() { Detail=message, ConnectionId=callerId});
         await Clients.All.SendAsync("MessageReceived", Messages);
     }
     public override Task OnConnectedAsync()
@@ -21,4 +21,10 @@ public class ChatHub : Hub
         // authorization? => Controller
         return Task.CompletedTask;
     }
+}
+
+public class Message
+{
+    public string Detail { get; set; }
+    public string ConnectionId { get; set; }
 }
