@@ -10,6 +10,7 @@ namespace Domain.Entities
 {
     public class Car : Entity<long>
     {
+        public string Image { get; set; }
         public int Kilometer { get; set; }
         public string Plate { get; set; }
         public short MinFindeksCreditRate { get; set; }
