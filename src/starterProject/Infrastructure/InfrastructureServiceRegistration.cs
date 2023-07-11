@@ -1,4 +1,6 @@
-﻿using Infrastructure.Payment.Adapters;
+﻿using Infrastructure.FileUpload.Adapters;
+using Infrastructure.FileUpload.Services.Cloudinary;
+using Infrastructure.Payment.Adapters;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,7 @@ public static class InfrastructureServiceRegistration
     {
         // FindeksService, TCKN doğrulama
         services.AddScoped<IPosServiceAdapter, IyziCoPosServiceAdapter>();
+        services.AddScoped<IFileUploadAdapter, CloudinaryAdapter>();
         return services;
     }
 }
