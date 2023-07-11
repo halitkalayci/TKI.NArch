@@ -4,6 +4,7 @@ using AutoMapper;
 using Core.Mailing;
 using Domain.Entities;
 using Hangfire;
+using Infrastructure.FileUpload.Adapters;
 using Infrastructure.Payment.Adapters;
 using Infrastructure.Payment.Services;
 using MailKit;
@@ -21,6 +22,7 @@ public class CreateCarCommand : IRequest<CreatedCarDto>
     // Kullanıcıdan bu komut için talep ettiğim bilgiler.
     public int Kilometer { get; set; }
     public string Plate { get; set; }
+    public string Image { get; set; }
 
     public class CreateCarCommandHandler : IRequestHandler<CreateCarCommand, CreatedCarDto>
     {
@@ -30,14 +32,16 @@ public class CreateCarCommand : IRequest<CreatedCarDto>
         private IPosServiceAdapter _posServiceAdapter;
         private CarBusinessRules _carBusinessRules;
         private Core.Mailing.IMailService _mailService;
+        private IFileUploadAdapter _fileUploadAdapter;
 
-        public CreateCarCommandHandler(IMapper mapper, ICarRepository carRepository, CarBusinessRules carBusinessRules, IPosServiceAdapter posServiceAdapter, Core.Mailing.IMailService mailService)
+        public CreateCarCommandHandler(IMapper mapper, ICarRepository carRepository, CarBusinessRules carBusinessRules, IPosServiceAdapter posServiceAdapter, Core.Mailing.IMailService mailService, IFileUploadAdapter fileUploadAdapter)
         {
             _mapper = mapper;
             _carRepository = carRepository;
             _carBusinessRules = carBusinessRules;
             _posServiceAdapter = posServiceAdapter;
             _mailService = mailService;
+            _fileUploadAdapter = fileUploadAdapter;
         }
 
         public async Task<CreatedCarDto> Handle(CreateCarCommand request, CancellationToken cancellationToken)
@@ -45,7 +49,7 @@ public class CreateCarCommand : IRequest<CreatedCarDto>
             await _carBusinessRules.CarWithSamePlateShouldNotExist(request.Plate);
 
             Car mappedCar = _mapper.Map<Car>(request);
-
+            mappedCar.Image = await _fileUploadAdapter.UploadImage(request.Image);
             Car addedCar = _carRepository.Add(mappedCar);
 
             CreatedCarDto dto = _mapper.Map<CreatedCarDto>(addedCar);
