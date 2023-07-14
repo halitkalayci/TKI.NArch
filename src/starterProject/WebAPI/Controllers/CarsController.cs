@@ -1,4 +1,5 @@
 ﻿using Application.Features.Cars.Commands.Create;
+using Application.Features.Cars.Queries.GetAll;
 using Application.Features.Cars.Queries.GetDynamic;
 using Application.Features.Cars.Queries.GetList;
 using Core.Application.Requests;
@@ -19,6 +20,14 @@ public class CarsController : BaseController
     {
         GetListCarQuery getListCarQuery = new() { PageRequest = pageRequest };
         var response = await Mediator.Send(getListCarQuery);
+        return Ok(response);
+    }
+
+    [HttpGet("getall")]
+    public async Task<IActionResult> GetAll()
+    {
+        GetAllCarItemQuery getAllCarItemQuery = new();
+        var response = await Mediator.Send(getAllCarItemQuery);
         return Ok(response);
     }
 
