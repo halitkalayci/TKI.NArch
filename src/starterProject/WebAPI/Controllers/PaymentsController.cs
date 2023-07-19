@@ -15,6 +15,11 @@ public class PaymentsController : BaseController
         _posServiceAdapter = new IyziCoPosServiceAdapter();
         return Ok(_posServiceAdapter.Pay(model.CreditCardNo, model.CVC, model.ExpireTime));
     }
+    [HttpPost("checkout-completed")]
+    public IActionResult CheckoutCompleted()
+    {
+        return Ok("Ödeme tamamlandı.");
+    }
 }
 
 public class PaymentModel
