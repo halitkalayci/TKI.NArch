@@ -15,6 +15,7 @@ using System.Reflection;
 using Application.Services.Customers;
 using Core.Application.Pipelines.Transaction;
 using Application.Services.Rentals;
+using Application.Services.GroupTreeContents;
 
 namespace Application;
 
@@ -43,6 +44,7 @@ public static class ApplicationServiceRegistration
         services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));
         services.AddScoped<ICustomersService, CustomersManager>();
         services.AddScoped<IRentalsService, RentalsManager>();
+        services.AddScoped<IGroupTreeContentsService, GroupTreeContentsManager>();
         return services;
     }
 

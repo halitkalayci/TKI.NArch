@@ -9,5 +9,6 @@ public enum GroupTreeContentType
 {
     Url=0,
     Redirect=1,
-    Logout=2
+    Logout=2,
+    Dropdown=3
 }

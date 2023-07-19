@@ -1,14 +1,11 @@
-﻿using Core.Persistence.Repositories;
+using Core.Application.Dtos;
 using Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Domain.Entities;
-public class GroupTreeContent : Entity<int>
+namespace Application.Features.GroupTreeContents.Queries.GetList;
+
+public class GetListGroupTreeContentListItemDto : IDto
 {
+    public int Id { get; set; }
     public string Title { get; set; }
     public string Target { get; set; }
     public string Icon { get; set; }
@@ -17,5 +14,4 @@ public class GroupTreeContent : Entity<int>
     public bool HideOnAuth { get; set; }
     public int? ParentId { get; set; }
     public GroupTreeContentType Type { get; set; }
-    public virtual ICollection<GroupTreeContentOperationClaim> GroupTreeContentOperationClaims { get; set; }
 }
