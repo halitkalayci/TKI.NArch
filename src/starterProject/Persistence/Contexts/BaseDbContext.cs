@@ -18,6 +18,8 @@ namespace Persistence.Contexts
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Rental> Rentals { get; set; }
         public DbSet<OtpAuthenticator> OtpAuthenticator { get; set; }
+        public DbSet<GroupTreeContent> GroupTreeContents { get; set; }
+        public DbSet<GroupTreeContentOperationClaim> GroupTreeContentOperationClaims { get; set; }
 
 
         public BaseDbContext(DbContextOptions dbContextOptions)
