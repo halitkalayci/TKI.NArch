@@ -9,15 +9,20 @@ public class PaymentsController : BaseController
 {
     private IPosServiceAdapter _posServiceAdapter;
 
+    public PaymentsController(IPosServiceAdapter posServiceAdapter)
+    {
+        _posServiceAdapter = posServiceAdapter;
+    }
+
     [HttpPost]
     public IActionResult Pay([FromBody] PaymentModel model)
     {
-        _posServiceAdapter = new IyziCoPosServiceAdapter();
         return Ok(_posServiceAdapter.Pay(model.CreditCardNo, model.CVC, model.ExpireTime));
     }
     [HttpPost("checkout-completed")]
     public IActionResult CheckoutCompleted()
     {
+        _posServiceAdapter.VerifyPayment("123");
         return Ok("Ödeme tamamlandı.");
     }
 }

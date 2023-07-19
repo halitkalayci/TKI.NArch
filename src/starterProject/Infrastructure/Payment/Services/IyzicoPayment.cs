@@ -1,6 +1,9 @@
-﻿using Iyzipay;
+﻿using Infrastructure.Payment.Adapters;
+using Iyzipay;
 using Iyzipay.Model;
+using Iyzipay.Model.V2.Transaction;
 using Iyzipay.Request;
+using Iyzipay.Request.V2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +13,7 @@ using System.Threading.Tasks;
 namespace Infrastructure.Payment.Services
 {
     // Dış kütüphane, IyziCo developerları tarafından yazılmış.
-    public class IyzicoPayment
+    public class IyzicoPayment : IPosServiceAdapter
     {
         public static Options GetOptions()
         {
@@ -20,7 +23,7 @@ namespace Infrastructure.Payment.Services
             options.BaseUrl = "https://sandbox-api.iyzipay.com";
             return options;
         }
-        public bool Pay(string creditCardNo, string cvc, DateTime expireTime)
+        public bool Pay(string creditCartNo, short cvc, DateTime expireTime)
         {
             #region directPay
             //CreatePaymentRequest request = new CreatePaymentRequest();
@@ -139,6 +142,19 @@ namespace Infrastructure.Payment.Services
 
             CheckoutFormInitialize payment = CheckoutFormInitialize.Create(request, GetOptions());
             return true;
+        }
+        // Kiralama => ConversationId db => Kiralama için ödeme tamamlandı mı?
+        // True => kiralama başarılı
+        // False => kiralama başarısız
+        public bool VerifyPayment(string conversationId)
+        {
+            RetrieveTransactionDetailRequest request = new RetrieveTransactionDetailRequest()
+            {
+                PaymentConversationId = conversationId
+            };
+            TransactionDetail transactionDetail = TransactionDetail.Retrieve(request, GetOptions());
+
+            return transactionDetail.Status == Status.SUCCESS.ToString();
         }
     }
 }
