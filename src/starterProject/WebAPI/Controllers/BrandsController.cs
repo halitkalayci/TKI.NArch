@@ -1,4 +1,5 @@
-﻿using Application.Features.Brands.Queries.GetAll;
+﻿using Application.Features.Brands.Commands.Update;
+using Application.Features.Brands.Queries.GetAll;
 using Application.Features.Brands.Queries.GetList;
 using Core.Application.Requests;
 using Microsoft.AspNetCore.Http;
@@ -26,5 +27,11 @@ public class BrandsController : BaseController
         GetAllBrandQuery query = new();
         var response = await Mediator.Send(query);
         return Ok(response);
+    }
+    [HttpPut]
+    public async Task<IActionResult> UpdateBrand([FromBody] UpdateBrandCommand command)
+    {
+        await Mediator.Send(command);
+        return Ok();    
     }
 }
