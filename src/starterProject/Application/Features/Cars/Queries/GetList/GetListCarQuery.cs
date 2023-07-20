@@ -49,7 +49,6 @@ public class GetListCarQuery : IRequest<GetListResponse<GetListCarItemDto>>, ISe
             );
 
             GetListResponse<GetListCarItemDto> response = _mapper.Map<GetListResponse<GetListCarItemDto>>(cars);
-            _posServiceAdapter.Pay("123", 123, DateTime.Now);
             return response;
         }
     }
