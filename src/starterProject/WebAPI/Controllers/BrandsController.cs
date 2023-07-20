@@ -1,4 +1,5 @@
-﻿using Application.Features.Brands.Queries.GetList;
+﻿using Application.Features.Brands.Queries.GetAll;
+using Application.Features.Brands.Queries.GetList;
 using Core.Application.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,14 @@ public class BrandsController : BaseController
         {
             PageRequest = pageRequest
         };
+        var response = await Mediator.Send(query);
+        return Ok(response);
+    }
+
+    [HttpGet("getall")]
+    public async Task<IActionResult> GetAllBrands()
+    {
+        GetAllBrandQuery query = new();
         var response = await Mediator.Send(query);
         return Ok(response);
     }
