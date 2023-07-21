@@ -14,6 +14,7 @@ namespace Domain.Entities
         public int Kilometer { get; set; }
         public string Plate { get; set; }
         public short MinFindeksCreditRate { get; set; }
+        public double DailyPrice { get; set; }
         public CarStates CarState { get; set; } // 0 = Available, 1= Rented, 2=Mainteance
     }
 }

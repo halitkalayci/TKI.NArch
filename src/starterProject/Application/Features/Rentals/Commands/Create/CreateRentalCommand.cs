@@ -11,11 +11,19 @@ using Application.Services.Customers;
 using Core.Security.Entities;
 using Hangfire;
 using Core.Mailing;
+using Infrastructure.Payment.Services.Models;
+using Application.Repositories;
+using Core.CrossCuttingConcerns.Exceptions.Types;
+using Infrastructure.Payment.Adapters;
 
 namespace Application.Features.Rentals.Commands.Create;
 
 public class CreateRentalCommand : IRequest<CreatedRentalResponse>, ISecuredRequest
 {
+    public string CardHolderName { get; set; }
+    public string CardNo { get; set; }
+    public short CVC { get; set; }
+    public DateTime ExpireTime { get; set; }
     public long CarId { get; set; }
     public int CustomerId { get; set; }
     public DateTime RentalStartDate { get; set; }
@@ -32,9 +40,10 @@ public class CreateRentalCommand : IRequest<CreatedRentalResponse>, ISecuredRequ
         private readonly ICustomersService _customerService;
         private readonly IUserService _userService;
         private readonly IMailService _mailService;
-
+        private readonly ICarRepository _carRepository;
+        private readonly IPosServiceAdapter _posServiceAdapter;
         public CreateRentalCommandHandler(IMapper mapper, IRentalRepository rentalRepository,
-                                         RentalBusinessRules rentalBusinessRules, ICustomersService customerService, IUserService userService, IMailService mailService)
+                                         RentalBusinessRules rentalBusinessRules, ICustomersService customerService, IUserService userService, IMailService mailService, ICarRepository carRepository, IPosServiceAdapter posServiceAdapter)
         {
             _mapper = mapper;
             _rentalRepository = rentalRepository;
@@ -42,6 +51,8 @@ public class CreateRentalCommand : IRequest<CreatedRentalResponse>, ISecuredRequ
             _customerService = customerService;
             _userService = userService;
             _mailService = mailService;
+            _carRepository = carRepository;
+            _posServiceAdapter = posServiceAdapter;
         }
 
         public async Task<CreatedRentalResponse> Handle(CreateRentalCommand request, CancellationToken cancellationToken)
@@ -49,16 +60,31 @@ public class CreateRentalCommand : IRequest<CreatedRentalResponse>, ISecuredRequ
             //request.CustomerId = _customerService
             Rental rental = _mapper.Map<Rental>(request);
 
+            // Ücret hesaplama, ödeme alýnma
+            Car carToRent = await _carRepository.GetAsync(i => i.Id == request.CarId && i.CarState == Domain.Enums.CarStates.Available);
+
+            if (carToRent == null)
+                throw new BusinessException("Kiralanacak araç bulunamadý.");
+            TimeSpan timeDiff = request.RentalEndDate - request.RentalStartDate;
+
+            var price = carToRent.DailyPrice * timeDiff.TotalDays;
+
+            var paymentResult = _posServiceAdapter.Pay(request.CardNo, request.CVC, request.ExpireTime);
+
+            if (!paymentResult.Success)
+                throw new BusinessException(paymentResult.ErrorMessage);
+
             await _rentalRepository.AddAsync(rental);
 
             CreatedRentalResponse response = _mapper.Map<CreatedRentalResponse>(rental);
 
             User user = await _userService.GetById(request.CustomerId);
 
-            TimeSpan timeDiff = request.RentalEndDate - request.RentalStartDate;
 
             BackgroundJob.Schedule(() => sendThanksMail(user), TimeSpan.FromMinutes(1));
             BackgroundJob.Schedule(() => sendReminder(user), TimeSpan.FromDays(timeDiff.Days - 1));
+
+
             return response;
         }
 

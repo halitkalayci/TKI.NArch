@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Payment.Services;
+using Infrastructure.Payment.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ public interface IPosServiceAdapter
 {
     // 12/27, 12/2027
     // string, datetime, (int month, int year) 
-    bool Pay(string creditCartNo, short cvc, DateTime expireTime);
+    PaymentResponseModel Pay(string creditCartNo, short cvc, DateTime expireTime);
     bool VerifyPayment(string conversationId);
 }
 
