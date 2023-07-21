@@ -1,4 +1,5 @@
-﻿using Application.Features.Brands.Queries.GetAll;
+﻿using Application.Features.Brands.Commands.Create;
+using Application.Features.Brands.Queries.GetAll;
 using Application.Features.Brands.Queries.GetList;
 using AutoMapper;
 using Core.Application.Responses;
@@ -18,5 +19,6 @@ public class MappingProfile : Profile
         CreateMap<Brand, GetListBrandDto>().ReverseMap();
         CreateMap<IPaginate<Brand>, GetListResponse<GetListBrandDto>>().ReverseMap();
         CreateMap<GetAllBrandQueryDto, Brand>().ReverseMap();
+        CreateMap<CreateBrandCommand, Brand>().ReverseMap();
     }
 }
