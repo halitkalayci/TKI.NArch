@@ -1,4 +1,5 @@
 ﻿using Application.Features.Brands.Commands.Create;
+using Application.Features.Brands.Commands.Delete;
 using Application.Features.Brands.Commands.Update;
 using Application.Features.Brands.Queries.GetAll;
 using Application.Features.Brands.Queries.GetList;
@@ -20,6 +21,17 @@ public class BrandsController : BaseController
         };
         var response = await Mediator.Send(query);
         return Ok(response);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
+    {
+        DeleteBrandCommand command = new DeleteBrandCommand()
+        {
+            Id = id
+        };
+        await Mediator.Send(command);
+        return Ok();
     }
 
     [HttpPost]
