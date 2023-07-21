@@ -95,61 +95,71 @@ namespace Infrastructure.Payment.Services
             };
             #endregion
             #region 3D
-            //CreateCheckoutFormInitializeRequest request = new CreateCheckoutFormInitializeRequest();
-            //request.Price = "50";
-            //request.PaidPrice = "60";
-            //request.Locale = Locale.TR.ToString();
-            //request.Currency = Currency.TRY.ToString();
-            //request.BasketId = Guid.NewGuid().ToString();
-            //request.ConversationId = Guid.NewGuid().ToString();
-            //request.PaymentGroup = PaymentGroup.PRODUCT.ToString();
-            //request.CallbackUrl = "http://localhost:5210/api/payments/checkout-completed";
-
-
-            //Buyer buyer = new Buyer();
-            //buyer.Ip = "127.0.1.1";
-            //buyer.Name = "John";
-            //buyer.Surname = "Doe";
-            //buyer.Email = "johndoe@gmail.com";
-            //buyer.GsmNumber = "1";
-            //buyer.IdentityNumber = "74300864791";
-            //buyer.LastLoginDate = "2015-10-05 12:43:35";
-            //buyer.RegistrationDate = "2013-04-21 15:12:09";
-            //buyer.RegistrationAddress = "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1";
-            //buyer.City = "Istanbul";
-            //buyer.Country = "Turkey";
-            //buyer.ZipCode = "34732";
-            //buyer.Id = "1";
-
-            //request.Buyer = buyer;
-
-
-            //Address billingAddress = new Address();
-            //billingAddress.ContactName = "Jane Doe";
-            //billingAddress.City = "Istanbul";
-            //billingAddress.Country = "Turkey";
-            //billingAddress.Description = "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1";
-            //billingAddress.ZipCode = "34742";
-            //request.BillingAddress = billingAddress;
-
-            //request.BillingAddress = billingAddress;
-
-            //List<BasketItem> basketItems = new List<BasketItem>();
-            //BasketItem firstBasketItem = new BasketItem();
-            //firstBasketItem.Id = "BMW01";
-            //firstBasketItem.Name = "BMW Kiralama Hizmeti";
-            //firstBasketItem.Category1 = "Hizmet";
-            //firstBasketItem.Category2 = "Araç Kiralama";
-            //firstBasketItem.ItemType = BasketItemType.VIRTUAL.ToString();
-            //firstBasketItem.Price = "50";
-            //basketItems.Add(firstBasketItem);
-
-            //request.BasketItems = basketItems;
-
-            //CheckoutFormInitialize payment = CheckoutFormInitialize.Create(request, GetOptions());
-            //return true;
+           
             #endregion
         }
+
+        public Payment3DResponseModel PayWith3D(string creditCartNo, short cvc, DateTime expireTime)
+        {
+            CreateCheckoutFormInitializeRequest request = new CreateCheckoutFormInitializeRequest();
+            request.Price = "50";
+            request.PaidPrice = "60";
+            request.Locale = Locale.TR.ToString();
+            request.Currency = Currency.TRY.ToString();
+            request.BasketId = Guid.NewGuid().ToString();
+            request.ConversationId = Guid.NewGuid().ToString();
+            request.PaymentGroup = PaymentGroup.PRODUCT.ToString();
+            request.CallbackUrl = "http://localhost:5210/api/payments/checkout-completed";
+
+
+            Buyer buyer = new Buyer();
+            buyer.Ip = "127.0.1.1";
+            buyer.Name = "John";
+            buyer.Surname = "Doe";
+            buyer.Email = "johndoe@gmail.com";
+            buyer.GsmNumber = "1";
+            buyer.IdentityNumber = "74300864791";
+            buyer.LastLoginDate = "2015-10-05 12:43:35";
+            buyer.RegistrationDate = "2013-04-21 15:12:09";
+            buyer.RegistrationAddress = "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1";
+            buyer.City = "Istanbul";
+            buyer.Country = "Turkey";
+            buyer.ZipCode = "34732";
+            buyer.Id = "1";
+
+            request.Buyer = buyer;
+
+
+            Address billingAddress = new Address();
+            billingAddress.ContactName = "Jane Doe";
+            billingAddress.City = "Istanbul";
+            billingAddress.Country = "Turkey";
+            billingAddress.Description = "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1";
+            billingAddress.ZipCode = "34742";
+            request.BillingAddress = billingAddress;
+
+            request.BillingAddress = billingAddress;
+
+            List<BasketItem> basketItems = new List<BasketItem>();
+            BasketItem firstBasketItem = new BasketItem();
+            firstBasketItem.Id = "BMW01";
+            firstBasketItem.Name = "BMW Kiralama Hizmeti";
+            firstBasketItem.Category1 = "Hizmet";
+            firstBasketItem.Category2 = "Araç Kiralama";
+            firstBasketItem.ItemType = BasketItemType.VIRTUAL.ToString();
+            firstBasketItem.Price = "50";
+            basketItems.Add(firstBasketItem);
+
+            request.BasketItems = basketItems;
+
+            CheckoutFormInitialize payment = CheckoutFormInitialize.Create(request, GetOptions());
+            return new Payment3DResponseModel()
+            {
+                Link = payment.PaymentPageUrl,
+                Html=payment.CheckoutFormContent
+            };
+        }
+
         // Kiralama => ConversationId db => Kiralama için ödeme tamamlandı mı?
         // True => kiralama başarılı
         // False => kiralama başarısız

@@ -12,6 +12,7 @@ public interface IPosServiceAdapter
     // 12/27, 12/2027
     // string, datetime, (int month, int year) 
     PaymentResponseModel Pay(string creditCartNo, short cvc, DateTime expireTime);
+    Payment3DResponseModel PayWith3D(string creditCartNo, short cvc, DateTime expireTime);
     bool VerifyPayment(string conversationId);
 }
 

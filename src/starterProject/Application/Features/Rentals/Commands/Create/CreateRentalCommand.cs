@@ -69,10 +69,14 @@ public class CreateRentalCommand : IRequest<CreatedRentalResponse>, ISecuredRequ
 
             var price = carToRent.DailyPrice * timeDiff.TotalDays;
 
-            var paymentResult = _posServiceAdapter.Pay(request.CardNo, request.CVC, request.ExpireTime);
+            var paymentResult = _posServiceAdapter.PayWith3D(request.CardNo, request.CVC, request.ExpireTime);
 
-            if (!paymentResult.Success)
-                throw new BusinessException(paymentResult.ErrorMessage);
+            return new CreatedRentalResponse()
+            {
+                Payment = paymentResult
+            };
+            //if (!paymentResult.Success)
+            //    throw new BusinessException(paymentResult.ErrorMessage);
 
             await _rentalRepository.AddAsync(rental);
 
