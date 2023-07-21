@@ -22,6 +22,7 @@ public class PaymentsController : BaseController
     [HttpPost("checkout-completed")]
     public IActionResult CheckoutCompleted()
     {
+        var request = Request;
         _posServiceAdapter.VerifyPayment("123");
         return Ok("Ödeme tamamlandı.");
     }

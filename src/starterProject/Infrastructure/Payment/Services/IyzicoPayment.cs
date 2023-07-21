@@ -156,22 +156,23 @@ namespace Infrastructure.Payment.Services
             return new Payment3DResponseModel()
             {
                 Link = payment.PaymentPageUrl,
-                Html=payment.CheckoutFormContent
+                Html=payment.CheckoutFormContent,
+                ConversationId=request.ConversationId
             };
         }
 
         // Kiralama => ConversationId db => Kiralama için ödeme tamamlandı mı?
         // True => kiralama başarılı
         // False => kiralama başarısız
-        public bool VerifyPayment(string conversationId)
+        public TransactionDetail VerifyPayment(string conversationId)
         {
             RetrieveTransactionDetailRequest request = new RetrieveTransactionDetailRequest()
             {
-                PaymentConversationId = conversationId
+                PaymentConversationId = conversationId,
+                ConversationId=conversationId
             };
             TransactionDetail transactionDetail = TransactionDetail.Retrieve(request, GetOptions());
-
-            return transactionDetail.Status == Status.SUCCESS.ToString();
+            return transactionDetail;
         }
     }
 }

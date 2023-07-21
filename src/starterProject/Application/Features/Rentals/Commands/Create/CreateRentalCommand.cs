@@ -15,6 +15,7 @@ using Infrastructure.Payment.Services.Models;
 using Application.Repositories;
 using Core.CrossCuttingConcerns.Exceptions.Types;
 using Infrastructure.Payment.Adapters;
+using Domain.Enums;
 
 namespace Application.Features.Rentals.Commands.Create;
 
@@ -70,6 +71,9 @@ public class CreateRentalCommand : IRequest<CreatedRentalResponse>, ISecuredRequ
             var price = carToRent.DailyPrice * timeDiff.TotalDays;
 
             var paymentResult = _posServiceAdapter.PayWith3D(request.CardNo, request.CVC, request.ExpireTime);
+            rental.PaymentId = paymentResult.ConversationId;
+            rental.Status = (short)RentalStates.WaitingPayment;
+            await _rentalRepository.AddAsync(rental);
 
             return new CreatedRentalResponse()
             {
@@ -78,7 +82,6 @@ public class CreateRentalCommand : IRequest<CreatedRentalResponse>, ISecuredRequ
             //if (!paymentResult.Success)
             //    throw new BusinessException(paymentResult.ErrorMessage);
 
-            await _rentalRepository.AddAsync(rental);
 
             CreatedRentalResponse response = _mapper.Map<CreatedRentalResponse>(rental);
 

@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Payment.Services;
 using Infrastructure.Payment.Services.Models;
+using Iyzipay.Model.V2.Transaction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,6 @@ public interface IPosServiceAdapter
     // string, datetime, (int month, int year) 
     PaymentResponseModel Pay(string creditCartNo, short cvc, DateTime expireTime);
     Payment3DResponseModel PayWith3D(string creditCartNo, short cvc, DateTime expireTime);
-    bool VerifyPayment(string conversationId);
+    TransactionDetail VerifyPayment(string conversationId);
 }
 

@@ -9,4 +9,5 @@ public class Payment3DResponseModel
 {
     public string Html { get; set; }
     public string Link { get; set; }
+    public string ConversationId { get; set; }
 }

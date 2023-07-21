@@ -16,7 +16,6 @@ public class Rental : Entity<long>
     public DateTime? ReturnDate { get; set; }
     public string PaymentId { get; set; }
     public short Status { get; set; }
-
     public virtual Car Car { get; set; }
     public virtual Customer Customer { get; set; }
 
