@@ -2,7 +2,10 @@
 using Application.Services.Auth;
 using Application.Services.UserService;
 using AutoMapper;
+using Core.Application.Pipelines.Authorization;
+using Core.Application.Pipelines.Transaction;
 using Core.Application.Responses;
+using Core.Security.Constants;
 using Core.Security.Entities;
 using Core.Security.Hashing;
 using Core.Security.JWT;
@@ -14,13 +17,16 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.Features.Auth.Commands.Register;
-public class RegisterCommand : IRequest<RegisterCommandResponse>
+public class RegisterCommand : IRequest<RegisterCommandResponse>, ISecuredRequest,ITransactionalRequest
 {
     public string Firstname { get; set; }
     public string Lastname { get; set; }
     public string Password { get; set; }
     public string Email { get; set; }
     public string IPAddress { get; set; }
+    public List<int> RoleIds { get; set; }
+
+    public string[] Roles => new string[] { GeneralOperationClaims.Admin };
 
     public class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterCommandResponse>
     {
@@ -48,6 +54,8 @@ public class RegisterCommand : IRequest<RegisterCommandResponse>
             userToAdd.PasswordSalt = passwordSalt;
 
             User addedUser = await _userService.Add(userToAdd);
+
+            await _authService.AssignRolesToUser(addedUser.Id, request.RoleIds);
 
             AccessToken accesToken = await _authService.CreateAccessToken(addedUser);
             RefreshToken refreshToken = await _authService.CreateRefreshToken(addedUser, request.IPAddress);

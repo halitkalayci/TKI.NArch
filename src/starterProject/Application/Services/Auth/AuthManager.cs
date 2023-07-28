@@ -1,32 +1,56 @@
 ﻿using Application.Repositories;
+using Core.CrossCuttingConcerns.Exceptions.Types;
 using Core.Security.Entities;
 using Core.Security.JWT;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Security.Claims;
 
 namespace Application.Services.Auth;
 
 public class AuthManager : IAuthService
 {
+    private readonly IOperationClaimRepository _operationClaimRepository;
     private readonly IUserRepository _userRepository;
     private readonly IRefreshTokenRepository _refreshTokenRepository;
     private readonly ITokenHelper _tokenHelper;
     private readonly IUserOperationClaimRepository _userOperationClaimRepository;
     private readonly TokenOptions _tokenOptions;
 
-    public AuthManager(IUserRepository userRepository, IRefreshTokenRepository refreshTokenRepository, ITokenHelper tokenHelper, IUserOperationClaimRepository userOperationClaimRepository, IConfiguration configuration)
+    public AuthManager(IUserRepository userRepository, IRefreshTokenRepository refreshTokenRepository, ITokenHelper tokenHelper, IUserOperationClaimRepository userOperationClaimRepository, IConfiguration configuration, IOperationClaimRepository operationClaimRepository)
     {
         _userRepository = userRepository;
         _refreshTokenRepository = refreshTokenRepository;
         _tokenHelper = tokenHelper;
         _userOperationClaimRepository = userOperationClaimRepository;
         _tokenOptions = configuration.GetSection("TokenOptions").Get<TokenOptions>();
+        _operationClaimRepository = operationClaimRepository;
     }
 
     public async Task<RefreshToken> AddRefreshToken(RefreshToken refreshToken)
     {
         var addedToken = await _refreshTokenRepository.AddAsync(refreshToken);
         return addedToken;
+    }
+
+    public async Task AssignRolesToUser(int userId, List<int> roleIds)
+    {
+        User user = await _userRepository.GetAsync(i => i.Id == userId);
+        if (user == null)
+            throw new BusinessException("Kullanıcı bulunamadı.");
+
+        List<UserOperationClaim> claims = new List<UserOperationClaim>();
+        foreach (int id in roleIds)
+        {
+            OperationClaim role = await _operationClaimRepository.GetAsync(i=>i.Id == id);
+            if (role != null)
+            {
+                UserOperationClaim claim = new UserOperationClaim(userId, id);
+                claims.Add(claim);
+            }
+        }
+
+        await _userOperationClaimRepository.AddRangeAsync(claims);
     }
 
     public async Task<AccessToken> CreateAccessToken(User user)

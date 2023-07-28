@@ -6,6 +6,8 @@ using Application.Features.Auth.Commands.Register;
 using Application.Features.Auth.Commands.RemoveOtp;
 using Application.Features.Auth.Commands.VerifyEmail;
 using Application.Features.Auth.Commands.VerifyOtpAuthenticator;
+using Application.Features.Auth.Queries.GetRolesQuery;
+using Application.Features.Auth.Queries.GetUsersQuery;
 using Core.Application.Dtos;
 using Core.Security.Entities;
 using Microsoft.AspNetCore.Http;
@@ -98,6 +100,21 @@ public class AuthController : BaseController
         };
         await Mediator.Send(command);
         return Ok();
+    }
+
+    [HttpGet("get-roles")]
+    public async Task<IActionResult> GetRoles()
+    {
+        GetRolesQuery query = new();
+        var result = await Mediator.Send(query);
+        return Ok(result);
+    }
+    [HttpGet("get-users")]
+    public async Task<IActionResult> GetUsers()
+    {
+        GetUsersQuery query = new();
+        var result = await Mediator.Send(query);
+        return Ok(result);
     }
 
     [HttpPost("verify-otp")]
