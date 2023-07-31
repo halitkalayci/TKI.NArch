@@ -58,7 +58,7 @@ public class AuthManager : IAuthService
 
         IList<OperationClaim> userRoles = await _userOperationClaimRepository
             .Query()
-            .Where(i => i.UserId == user.Id)
+            .Where(i => i.UserId == user.Id && !i.DeletedDate.HasValue)
             //.Include(i=>i.OperationClaim)
             .Select(i => new OperationClaim() { Id = i.OperationClaimId, Name = i.OperationClaim.Name })
             .ToListAsync();

@@ -19,6 +19,14 @@ public class AuthBusinessRules : BaseBusinessRules
         _userRepository = userRepository;
     }
 
+
+    public Task UserMustBeActive(User user)
+    {
+        if (user.Status == false)
+            throw new BusinessException("Bu kullanıcı pasife alınmış");
+        return Task.CompletedTask;
+    }
+
     public async Task UserWithSameEmailAndAnotherIdShouldNotExist(int userId, string email)
     {
         User? user = await _userRepository.GetAsync(i => i.Email == email && i.Id != userId);

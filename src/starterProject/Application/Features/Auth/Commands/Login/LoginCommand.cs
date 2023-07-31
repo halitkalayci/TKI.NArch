@@ -36,9 +36,9 @@ public class LoginCommand : IRequest<LoginCommandResponse>
         public async Task<LoginCommandResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             User? userToLogin = await _userService.GetByEmail(request.UserForLoginDto.Email);
-
+            
             await _authBusinessRules.UserMustExist(userToLogin);
-
+            await _authBusinessRules.UserMustBeActive(userToLogin);
             await _authBusinessRules.UserPasswordMustMatch(userToLogin, request.UserForLoginDto.Password);
 
             if (userToLogin.AuthenticatorType is not AuthenticatorType.None)

@@ -23,6 +23,7 @@ public class UpdateUserCommand : IRequest, ISecuredRequest, ITransactionalReques
     public int Id { get; set; }
     public string? Password { get; set; }
     public List<int> RoleIds { get; set; }
+    public bool Status { get; set; }
 
     public string[] Roles => new string[] { GeneralOperationClaims.Admin };
 
@@ -51,6 +52,7 @@ public class UpdateUserCommand : IRequest, ISecuredRequest, ITransactionalReques
             dbUser.Email = request.Email;
             dbUser.FirstName = request.Firstname;
             dbUser.LastName = request.Lastname;
+            dbUser.Status = request.Status;
             //dbUser = _mapper.Map<User>(request);
 
             if (!string.IsNullOrEmpty(request.Password))
