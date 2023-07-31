@@ -52,6 +52,7 @@ public class RegisterCommand : IRequest<RegisterCommandResponse>, ISecuredReques
             HashingHelper.CreatePasswordHash(request.Password, out passwordHash, out passwordSalt);
             userToAdd.PasswordHash = passwordHash;
             userToAdd.PasswordSalt = passwordSalt;
+            userToAdd.Status = true;
 
             User addedUser = await _userService.Add(userToAdd);
 
