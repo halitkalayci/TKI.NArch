@@ -1,4 +1,5 @@
 ﻿using Application.Features.Auth.Commands.Register;
+using Application.Features.Auth.Commands.UpdateUser;
 using AutoMapper;
 using Core.Security.Entities;
 using System;
@@ -13,5 +14,6 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<User,RegisterCommand>().ReverseMap();
+        CreateMap<User, UpdateUserCommand>().ReverseMap();
     }
 }

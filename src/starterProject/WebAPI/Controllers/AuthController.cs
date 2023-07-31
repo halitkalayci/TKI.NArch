@@ -4,6 +4,7 @@ using Application.Features.Auth.Commands.Login;
 using Application.Features.Auth.Commands.RefreshTokenCommand;
 using Application.Features.Auth.Commands.Register;
 using Application.Features.Auth.Commands.RemoveOtp;
+using Application.Features.Auth.Commands.UpdateUser;
 using Application.Features.Auth.Commands.VerifyEmail;
 using Application.Features.Auth.Commands.VerifyOtpAuthenticator;
 using Application.Features.Auth.Queries.GetRolesQuery;
@@ -122,6 +123,12 @@ public class AuthController : BaseController
     {
         otp.UserId = getAuthenticatedUserId();
         await Mediator.Send(otp);
+        return Ok();
+    }
+    [HttpPut]
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command)
+    {
+        await Mediator.Send(command);
         return Ok();
     }
 

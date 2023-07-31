@@ -81,4 +81,12 @@ public class AuthManager : IAuthService
         RefreshToken refreshToken = await _refreshTokenRepository.GetAsync(i => i.Token == token);
         return refreshToken;
     }
+
+    public async Task RemoveAllRolesFromUser(int userId)
+    {
+        var operationClaims = _userOperationClaimRepository.Query().Where(i => i.UserId == userId).ToList();
+
+        await _userOperationClaimRepository.DeleteRangeAsync(operationClaims);
+    }
+
 }
