@@ -6,6 +6,7 @@ using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Transaction;
 using Core.Security.Constants;
 using Core.Security.Entities;
+using Core.Security.Hashing;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -51,6 +52,16 @@ public class UpdateUserCommand : IRequest, ISecuredRequest, ITransactionalReques
             dbUser.FirstName = request.Firstname;
             dbUser.LastName = request.Lastname;
             //dbUser = _mapper.Map<User>(request);
+
+            if (!string.IsNullOrEmpty(request.Password))
+            {
+                byte[] passwordHash, passwordSalt;
+                HashingHelper.CreatePasswordHash(request.Password, out passwordHash, out passwordSalt);
+
+                dbUser.PasswordHash = passwordHash;
+                dbUser.PasswordSalt = passwordSalt;
+            }
+
 
             await _userRepository.UpdateAsync(dbUser);
 

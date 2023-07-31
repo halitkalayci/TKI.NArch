@@ -13,4 +13,9 @@ public static class CustomAuthValidationRules
         Regex regex = new Regex("^(?=.*[A-Z])(?=.*\\d)(?=.*[^\\w\\s]).+$");
         return regex.IsMatch(password);
     }
+    public static bool PasswordShouldBeNullOrMatch(string password)
+    {
+        Regex regex = new Regex("^(?=.*[A-Z])(?=.*\\d)(?=.*[^\\w\\s]).+$");
+        return string.IsNullOrEmpty(password) || regex.IsMatch(password);
+    }
 }
