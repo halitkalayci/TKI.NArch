@@ -19,6 +19,13 @@ public class AuthBusinessRules : BaseBusinessRules
         _userRepository = userRepository;
     }
 
+    public async Task UserWithSameEmailAndAnotherIdShouldNotExist(int userId, string email)
+    {
+        User? user = await _userRepository.GetAsync(i => i.Email == email && i.Id != userId);
+        if (user != null)
+            throw new BusinessException("Bu email ile kayıtlı bir kullanıcı zaten mevcut");
+    }
+
     public Task UserMustExist(User? user)
     {
         if (user == null)

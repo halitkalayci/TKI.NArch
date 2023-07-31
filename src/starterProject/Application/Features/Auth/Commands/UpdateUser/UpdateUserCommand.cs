@@ -20,6 +20,7 @@ public class UpdateUserCommand : IRequest, ISecuredRequest, ITransactionalReques
     public string Lastname { get; set; }
     public string Email { get; set; }
     public int Id { get; set; }
+    public string? Password { get; set; }
     public List<int> RoleIds { get; set; }
 
     public string[] Roles => new string[] { GeneralOperationClaims.Admin };
@@ -43,7 +44,7 @@ public class UpdateUserCommand : IRequest, ISecuredRequest, ITransactionalReques
             User dbUser = await _userRepository.GetAsync(i => i.Id == request.Id);
             await _authBusinessRules.UserMustExist(dbUser);
 
-            await _authBusinessRules.UserWithSameEmailShouldNotExist(request.Email);
+            await _authBusinessRules.UserWithSameEmailAndAnotherIdShouldNotExist(dbUser.Id,request.Email);
 
             // Update'de mapper kullanmamak daha doğru.
             dbUser.Email = request.Email;
