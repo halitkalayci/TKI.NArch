@@ -1,0 +1,28 @@
+{
+  "ExtendedData": {
+    "inputs": [
+      "https://tckimlik.nvi.gov.tr/Service/KPSPublic.asmx?WSDL"
+    ],
+    "collectionTypes": [
+      "System.Array",
+      "System.Collections.Generic.Dictionary`2"
+    ],
+    "namespaceMappings": [
+      "*, TCKNService"
+    ],
+    "references": [
+      "CloudinaryDotNet, {CloudinaryDotNet, 1.21.0}",
+      "Iyzipay, {Iyzipay, 2.1.55}",
+      "Microsoft.AspNetCore.Html.Abstractions, {Microsoft.AspNetCore.Html.Abstractions, 2.2.0}",
+      "Microsoft.AspNetCore.Http.Abstractions, {Microsoft.AspNetCore.Http.Abstractions, 2.2.0}",
+      "Microsoft.AspNetCore.Http.Features, {Microsoft.AspNetCore.Http.Features, 2.2.0}",
+      "Microsoft.Extensions.DependencyInjection.Abstractions, {Microsoft.Extensions.DependencyInjection.Abstractions, 7.0.0}",
+      "Microsoft.Extensions.Primitives, {Microsoft.Extensions.Primitives, 2.2.0}",
+      "Newtonsoft.Json, {Newtonsoft.Json, 13.0.2}",
+      "System.Runtime.CompilerServices.Unsafe, {System.Runtime.CompilerServices.Unsafe, 4.5.1}",
+      "System.Text.Encodings.Web, {System.Text.Encodings.Web, 4.5.0}"
+    ],
+    "targetFramework": "net7.0",
+    "typeReuseMode": "All"
+  }
+}

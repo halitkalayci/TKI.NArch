@@ -5,10 +5,12 @@ using AutoMapper;
 using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Transaction;
 using Core.Application.Responses;
+using Core.CrossCuttingConcerns.Exceptions.Types;
 using Core.Security.Constants;
 using Core.Security.Entities;
 using Core.Security.Hashing;
 using Core.Security.JWT;
+using Infrastructure.Verification.TCKN;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -17,10 +19,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.Features.Auth.Commands.Register;
-public class RegisterCommand : IRequest<RegisterCommandResponse>, ISecuredRequest,ITransactionalRequest
+public class RegisterCommand : IRequest<RegisterCommandResponse>, ITransactionalRequest
 {
     public string Firstname { get; set; }
     public string Lastname { get; set; }
+    public DateTime BirthDate { get; set; }
+    public string NationalityId { get; set; }
     public string Password { get; set; }
     public string Email { get; set; }
     public string IPAddress { get; set; }
@@ -34,17 +38,23 @@ public class RegisterCommand : IRequest<RegisterCommandResponse>, ISecuredReques
         private IUserService _userService;
         private AuthBusinessRules _businessRules;
         private IMapper _mapper;
+        private IVerificationService _verificationService;
 
-        public RegisterCommandHandler(IAuthService authService, IUserService userService, AuthBusinessRules businessRules, IMapper mapper)
+        public RegisterCommandHandler(IAuthService authService, IUserService userService, AuthBusinessRules businessRules, IMapper mapper, IVerificationService verificationService)
         {
             _authService = authService;
             _userService = userService;
             _businessRules = businessRules;
             _mapper = mapper;
+            _verificationService = verificationService;
         }
 
         public async Task<RegisterCommandResponse> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
+            var verificationResult = await _verificationService.VerifyTCKN(long.Parse(request.NationalityId), request.Firstname, request.Lastname, request.BirthDate.Year);
+
+            if (!verificationResult)
+                throw new BusinessException("TC Kimlik numarası doğrulanamadı.");
             await _businessRules.UserWithSameEmailShouldNotExist(request.Email);
 
             User userToAdd = _mapper.Map<User>(request);
