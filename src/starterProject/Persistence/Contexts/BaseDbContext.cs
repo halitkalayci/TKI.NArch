@@ -20,6 +20,7 @@ namespace Persistence.Contexts
         public DbSet<OtpAuthenticator> OtpAuthenticator { get; set; }
         public DbSet<GroupTreeContent> GroupTreeContents { get; set; }
         public DbSet<GroupTreeContentOperationClaim> GroupTreeContentOperationClaims { get; set; }
+        public DbSet<FileUploads> FileUploads { get; set; }
 
 
         public BaseDbContext(DbContextOptions dbContextOptions)

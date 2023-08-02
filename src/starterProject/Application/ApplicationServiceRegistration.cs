@@ -16,6 +16,7 @@ using Application.Services.Customers;
 using Core.Application.Pipelines.Transaction;
 using Application.Services.Rentals;
 using Application.Services.GroupTreeContents;
+using Application.Services.FileUpload;
 
 namespace Application;
 
@@ -45,6 +46,7 @@ public static class ApplicationServiceRegistration
         services.AddScoped<ICustomersService, CustomersManager>();
         services.AddScoped<IRentalsService, RentalsManager>();
         services.AddScoped<IGroupTreeContentsService, GroupTreeContentsManager>();
+        services.AddScoped<IFileUploadsService, FileUploadsManager>();
         return services;
     }
 

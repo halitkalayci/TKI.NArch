@@ -19,7 +19,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.Features.Auth.Commands.Register;
-public class RegisterCommand : IRequest<RegisterCommandResponse>, ITransactionalRequest
+public class RegisterCommand : IRequest<RegisterCommandResponse>, ISecuredRequest, ITransactionalRequest
 {
     public string Firstname { get; set; }
     public string Lastname { get; set; }
