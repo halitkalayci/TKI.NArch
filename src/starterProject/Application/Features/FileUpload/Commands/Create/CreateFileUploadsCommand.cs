@@ -15,6 +15,7 @@ public class CreateFileUploadsCommand : IRequest<CreatedFileUploadsResponse>, IS
     public int UserId { get; set; }
     public List<IFormFile> Files { get; set; }
     public string Description { get; set; }
+    public string? Extension { get; set; }
 
     public string[] Roles => new string[] { GeneralOperationClaims.Admin };
 
@@ -40,7 +41,7 @@ public class CreateFileUploadsCommand : IRequest<CreatedFileUploadsResponse>, IS
             {
                 FileUploads fileUploads = _mapper.Map<FileUploads>(request);
                 fileUploads.FileName = item.FileName;
-                fileUploads.Destination = _fileUploadService.Upload(item);
+                fileUploads.Destination = _fileUploadService.Upload(item,request.Extension);
                 fileUploads.UserId = request.UserId;
                 await _fileUploadsRepository.AddAsync(fileUploads);
             }

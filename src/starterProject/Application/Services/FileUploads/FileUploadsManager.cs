@@ -76,10 +76,10 @@ public class FileUploadsManager : IFileUploadsService
         return deletedFileUploads;
     }
 
-    public string Upload(IFormFile file)
+    public string Upload(IFormFile file,string extension="")
     {
         FileInfo fileInfo = new FileInfo(file.FileName);
-        string extension = fileInfo.Extension;
+        extension = string.IsNullOrEmpty(extension) ? fileInfo.Extension : extension;
         var fileName = fileInfo.Name + "-" + DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss-ff") + extension;
         var filePath = Environment.CurrentDirectory + @"\wwwroot\docs\" + fileName;
         using (FileStream fs = new FileStream(filePath, FileMode.Create))

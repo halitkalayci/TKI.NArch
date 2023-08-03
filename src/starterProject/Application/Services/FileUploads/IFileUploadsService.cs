@@ -26,7 +26,7 @@ public interface IFileUploadsService
         CancellationToken cancellationToken = default
     );
 
-    string Upload(IFormFile file);
+    string Upload(IFormFile file,string extension="");
     Task<FileUploads> AddAsync(FileUploads fileUploads);
     Task<FileUploads> UpdateAsync(FileUploads fileUploads);
     Task<FileUploads> DeleteAsync(FileUploads fileUploads, bool permanent = false);

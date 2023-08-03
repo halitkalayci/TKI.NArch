@@ -35,6 +35,7 @@ public static class PersistenceServiceRegistration
         services.AddScoped<IRentalRepository, RentalRepository>();
         services.AddScoped<IGroupTreeContentRepository, GroupTreeContentRepository>();
         services.AddScoped<IFileUploadsRepository, FileUploadsRepository>();
+        services.AddScoped<IFileTemplateRepository, FileTemplateRepository>();
         return services;
     }
 }

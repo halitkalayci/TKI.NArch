@@ -17,6 +17,7 @@ using Core.Application.Pipelines.Transaction;
 using Application.Services.Rentals;
 using Application.Services.GroupTreeContents;
 using Application.Services.FileUpload;
+using Application.Services.FileTemplates;
 
 namespace Application;
 
@@ -47,6 +48,7 @@ public static class ApplicationServiceRegistration
         services.AddScoped<IRentalsService, RentalsManager>();
         services.AddScoped<IGroupTreeContentsService, GroupTreeContentsManager>();
         services.AddScoped<IFileUploadsService, FileUploadsManager>();
+        services.AddScoped<IFileTemplatesService, FileTemplatesManager>();
         return services;
     }
 

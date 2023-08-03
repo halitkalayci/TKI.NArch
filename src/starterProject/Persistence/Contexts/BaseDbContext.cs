@@ -21,6 +21,7 @@ namespace Persistence.Contexts
         public DbSet<GroupTreeContent> GroupTreeContents { get; set; }
         public DbSet<GroupTreeContentOperationClaim> GroupTreeContentOperationClaims { get; set; }
         public DbSet<FileUploads> FileUploads { get; set; }
+        public DbSet<FileTemplate> FileTemplates { get; set; }
 
 
         public BaseDbContext(DbContextOptions dbContextOptions)
